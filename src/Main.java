@@ -1,4 +1,5 @@
 import javax.swing.*;
+import java.awt.*;
 
 public class Main {
 
@@ -7,6 +8,8 @@ public class Main {
 
         Toolbar toolbar = new Toolbar();
         MenuBar menuBar = new MenuBar();
+
+        FilePanel filePanel = new FilePanel();
 
         for (UIManager.LookAndFeelInfo info: UIManager.getInstalledLookAndFeels()) {
             if ("Nimbus".equals(info.getName())) {
@@ -20,11 +23,17 @@ public class Main {
 
         mainFrame.getMainFrame().setJMenuBar(menuBar.createMenu());
 
-        mainFrame.getMainFrame().add(toolbar.createButtons());
+        mainFrame.getMainFrame().add(toolbar.createButtons(), BorderLayout.NORTH);
+
+//        mainFrame.getMainFrame().add(filePanel.createDownloadPanel("GTA"));
+
+        mainFrame.getMainFrame().add(filePanel.createDownloadPanel("GTA", 500.26, 50), BorderLayout.CENTER);
+
+//        mainFrame.getMainFrame().setContentPane();
 
         mainFrame.getMainFrame().setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
-        mainFrame.getMainFrame().pack();
+//        mainFrame.getMainFrame().pack();
         mainFrame.getMainFrame().setVisible(true);
     }
 }

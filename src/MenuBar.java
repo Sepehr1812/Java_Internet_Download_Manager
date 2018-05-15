@@ -1,4 +1,6 @@
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 
@@ -75,6 +77,19 @@ public class MenuBar {
         menuItem = new JMenuItem("About");
         menuItem.setMnemonic(KeyEvent.VK_A);
         menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, InputEvent.SHIFT_MASK));
+        menuItem.addActionListener(new ActionListener() {
+            /**
+             * Invoked when an action occurs.
+             *
+             * @param e
+             */
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JOptionPane.showMessageDialog(null, "Developer: Sepehr Akhoundi" +
+                        "\nID Number: 9631002\n\nDate of Start: 2018/12/05\nDate of End: \n\nYou can use Tomato Downloader EASY & FREE!"
+                        , "About", JOptionPane.PLAIN_MESSAGE, new ImageIcon("../GIFs/About.gif"));
+            }
+        });
 
         menu.add(menuItem);
 

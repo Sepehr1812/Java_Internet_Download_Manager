@@ -20,7 +20,7 @@ public class Toolbar{
         bagC.ipadx = 10;
         bagC.ipady = 15;
 
-        toolBar.setSize(600, 100);
+        //toolBar.setSize(600, 100);
         toolBar.setLocation(0, 0);
 
         //Adding buttons.

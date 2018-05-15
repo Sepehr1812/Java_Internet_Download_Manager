@@ -1,4 +1,5 @@
 import javax.swing.*;
+import java.awt.*;
 
 public class MainFrame extends JFrame {
 
@@ -13,6 +14,8 @@ public class MainFrame extends JFrame {
 
         mainFrame.setSize(700, 500);
         mainFrame.setLocation(100, 100);
+
+        mainFrame.setLayout(new BorderLayout(5, 5));
     }
 
     public JFrame getMainFrame() {
