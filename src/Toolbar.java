@@ -1,17 +1,12 @@
 import javax.swing.*;
 import java.awt.*;
 
-public class Toolbar extends JPanel {
+public class Toolbar{
 
-    private JToolBar toolBar = new JToolBar();
+    public JPanel createButtons() {
+        JPanel panel = new JPanel(new GridBagLayout());
 
-    Toolbar() {
-        super(new GridBagLayout());
-
-        makeButton();
-    }
-
-    private void makeButton() {
+        JToolBar toolBar = new JToolBar();
         JButton button;
 
         GridBagConstraints bagC = new GridBagConstraints();
@@ -46,6 +41,10 @@ public class Toolbar extends JPanel {
 
         button = makeNavigationButton("Setting100", "Go to setting!", "Setting");
         toolBar.add(button);
+
+        panel.add(toolBar);
+
+        return panel;
     }
 
     private JButton makeNavigationButton(String imageName, String toolTipText, String altText) {
@@ -64,9 +63,5 @@ public class Toolbar extends JPanel {
         button.setSize(50, 50);
 
         return button;
-    }
-
-    public JToolBar getToolBar() {
-        return toolBar;
     }
 }

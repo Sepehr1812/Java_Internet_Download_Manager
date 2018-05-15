@@ -8,9 +8,19 @@ public class Main {
         Toolbar toolbar = new Toolbar();
         MenuBar menuBar = new MenuBar();
 
-        mainFrame.getMainFrame().setJMenuBar(menuBar.getMenuBar());
+        for (UIManager.LookAndFeelInfo info: UIManager.getInstalledLookAndFeels()) {
+            if ("Nimbus".equals(info.getName())) {
+                try {
+                    UIManager.setLookAndFeel(info.getClassName());
+                } catch (ClassNotFoundException | InstantiationException | UnsupportedLookAndFeelException | IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
 
-        mainFrame.getMainFrame().add(toolbar.getToolBar());
+        mainFrame.getMainFrame().setJMenuBar(menuBar.createMenu());
+
+        mainFrame.getMainFrame().add(toolbar.createButtons());
 
         mainFrame.getMainFrame().setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
