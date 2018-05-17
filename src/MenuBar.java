@@ -1,12 +1,10 @@
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 
 public class MenuBar {
 
-    public JMenuBar createMenu() {
+    public JMenuBar createMenu(JFrame frame) {
         JMenuBar menuBar = new JMenuBar();
         JMenu menu;
         JMenuItem menuItem;
@@ -15,7 +13,7 @@ public class MenuBar {
         menu.setMnemonic(KeyEvent.VK_D);
         menuBar.add(menu);
 
-        String[] menuItems = {"New Download", "Resume", "Pause", "Cancel", "Remove", "Setting", "Exit"};
+        String[] menuItems = {"New Download", "Resume", "Pause", "Cancel", "Remove", "Settings", "Exit"};
 
         for (int i = 0; i < menuItems.length; i ++) {
             menuItem = new JMenuItem(menuItems[i]);
@@ -50,11 +48,15 @@ public class MenuBar {
                     menuItem.setMnemonic(KeyEvent.VK_S);
                     menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_MASK));
 
+                    menuItem.addActionListener(e -> Main.openSettings(frame));
+
                     break;
                 case 6:
                     menu.addSeparator();
                     menuItem.setMnemonic(KeyEvent.VK_X);
-                    menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, InputEvent.CTRL_MASK));
+                    menuItem.setAccelerator(KeyStroke.getKeyStroke("control alt X"));
+
+                    menuItem.addActionListener(e -> System.exit(0));
 
                     break;
             }
@@ -77,19 +79,9 @@ public class MenuBar {
         menuItem = new JMenuItem("About");
         menuItem.setMnemonic(KeyEvent.VK_A);
         menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, InputEvent.SHIFT_MASK));
-        menuItem.addActionListener(new ActionListener() {
-            /**
-             * Invoked when an action occurs.
-             *
-             * @param e
-             */
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(null, "Developer: Sepehr Akhoundi" +
-                        "\nID Number: 9631002\n\nDate of Start: 2018/12/05\nDate of End: \n\nYou can use Tomato Downloader EASY & FREE!"
-                        , "About", JOptionPane.PLAIN_MESSAGE, new ImageIcon("../GIFs/About.gif"));
-            }
-        });
+        menuItem.addActionListener(e -> JOptionPane.showMessageDialog(null, "Developer: Sepehr Akhoundi" +
+                        "\nID Number: 9631002\n\nDate of Start: 2018/12/05\nDate of End: \n\nYou can use Tomato Downloader EASY & FREE!",
+                "About", JOptionPane.PLAIN_MESSAGE, new ImageIcon("../GIFs/About.gif")));
 
         menu.add(menuItem);
 

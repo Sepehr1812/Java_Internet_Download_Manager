@@ -27,10 +27,7 @@ public class Toolbar{
         button = makeNavigationButton("New100", "Start a new download!", "New Download");
         toolBar.add(button);
 
-        button = makeNavigationButton("Resume100", "Resume downloading the file(s)!", "Resume");
-        toolBar.add(button);
-
-        button = makeNavigationButton("Pause100", "Pause downloading the file(s)!", "Pause");
+        button = makeNavigationButton("ResumeAndPause100", "Resume downloading the file(s)!", "Resume");
         toolBar.add(button);
 
         button = makeNavigationButton("Cancel100", "Cancel downloading the file(s)!", "Cancel");
@@ -39,7 +36,7 @@ public class Toolbar{
         button = makeNavigationButton("Remove100", "Remove file from your list(s)!", "Remove");
         toolBar.add(button);
 
-        button = makeNavigationButton("Setting100", "Go to setting!", "Setting");
+        button = makeNavigationButton("Setting100", "Go to settings!", "Settings");
         toolBar.add(button);
 
         panel.add(toolBar);
