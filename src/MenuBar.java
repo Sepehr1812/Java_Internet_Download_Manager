@@ -22,7 +22,11 @@ public class MenuBar {
                 case 0:
                     menuItem.setMnemonic(KeyEvent.VK_N);
                     menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_MASK));
-//
+                    menuItem.addActionListener(e -> {
+                            MyFile newFile = NewDownload.startNewDownload(frame);
+                            FilePanel.addToMainPanel(frame, newFile);
+                    });
+
                     break;
                 case 1:
                     menuItem.setMnemonic(KeyEvent.VK_R);
@@ -48,7 +52,7 @@ public class MenuBar {
                     menuItem.setMnemonic(KeyEvent.VK_S);
                     menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_MASK));
 
-                    menuItem.addActionListener(e -> Main.openSettings(frame));
+                    menuItem.addActionListener(e -> SettingsFrame.createSettings(frame));
 
                     break;
                 case 6:

@@ -5,7 +5,7 @@ import java.awt.image.BufferedImage;
 public class SystemTray {
 
     private static Image getImage() {
-        Icon trayIcon = new ImageIcon("../GIFs/New.gif");
+        Icon trayIcon = new ImageIcon("../Images/Tray.jpg");
 
         Image image = new BufferedImage(trayIcon.getIconWidth(), trayIcon.getIconHeight(), BufferedImage.TYPE_4BYTE_ABGR);
 
@@ -17,7 +17,7 @@ public class SystemTray {
     private static PopupMenu createPopupMenu(JFrame frame, TrayIcon icon) {
         PopupMenu menu = new PopupMenu();
 
-        MenuItem open = new MenuItem("Open Blue Downloader...");
+        MenuItem open = new MenuItem("Open Wavy Downloader...");
         open.addActionListener(e -> {
             java.awt.SystemTray.getSystemTray().remove(icon);
             frame.setVisible(true);
@@ -35,7 +35,7 @@ public class SystemTray {
     public static void goToTray(JFrame frame) {
         frame.setVisible(false);
 
-        TrayIcon icon = new TrayIcon(getImage(),"Blue Downloader");
+        TrayIcon icon = new TrayIcon(getImage(),"Wavy Downloader");
         icon.setPopupMenu(createPopupMenu(frame, icon));
 
         icon.addActionListener(e -> {
