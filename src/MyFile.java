@@ -11,6 +11,9 @@ public class MyFile {
     private String name, link, directory, scale, time;
     private double size, speed;
     private int percent;
+    private JProgressBar progressBar = new JProgressBar(0, 100);
+    private boolean isSelected = false;
+
 
     MyFile(String directory, double size, String scale, double speed, String time, int percent) {
         this.directory = directory;
@@ -61,11 +64,24 @@ public class MyFile {
         return percent;
     }
 
+    public void setPercent(int percent) {
+        this.percent = percent;
+    }
+
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(boolean selected) {
+        isSelected = selected;
+    }
+
     public JPanel convertToJPanel() {
         JPanel panel = new JPanel(new GridLayout(3, 1, 1, 1));
         panel.setBackground(Color.DARK_GRAY);
         panel.setForeground(Color.LIGHT_GRAY);
 
+        JLabel speed = new JLabel(getSpeed() + " KB/s");
         JLabel name = new JLabel(getName());
         name.setHorizontalAlignment(SwingConstants.LEFT);
         name.setBackground(Color.DARK_GRAY);
@@ -79,7 +95,7 @@ public class MyFile {
              */
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (SwingUtilities.isLeftMouseButton(e)) {
+                if (e.getClickCount() == 2) {
                     try {
                         Desktop desktop = null;
                         if (Desktop.isDesktopSupported()) {
@@ -92,26 +108,24 @@ public class MyFile {
                     }
                 } else if (SwingUtilities.isRightMouseButton(e))
                     JOptionPane.showMessageDialog(panel, myToString(), "Download Info", JOptionPane.PLAIN_MESSAGE, new ImageIcon("../GIFs/Info.gif"));
+                else if (SwingUtilities.isLeftMouseButton(e))
+                    selecting(panel, name, speed);
             }
         });
 
         panel.add(name);
 
 
-        JProgressBar progressBar = new JProgressBar();
-        progressBar.setMinimum(0);
-        progressBar.setMaximum(100);
         progressBar.setStringPainted(true);
         progressBar.setValue(getPercent());
         progressBar.setString(getPercent() / 100.0 * getSize() + " " + getScale() + " / " + getSize() + getScale() + "  (" + getPercent() + "%)");
         UIManager.put("ProgressBar.background", Color.DARK_GRAY);
         progressBar.setBackground(Color.DARK_GRAY);
-        progressBar.setForeground(Color.DARK_GRAY);
+        progressBar.setForeground(Color.GRAY);
 
         panel.add(progressBar);
 
 
-        JLabel speed = new JLabel(getSpeed() + " KB/s");
         speed.setHorizontalAlignment(SwingConstants.RIGHT);
         speed.setBackground(Color.DARK_GRAY);
         speed.setForeground(Color.LIGHT_GRAY);
@@ -128,8 +142,12 @@ public class MyFile {
             public void mouseReleased(MouseEvent e) {
                 if (SwingUtilities.isRightMouseButton(e))
                     JOptionPane.showMessageDialog(panel, myToString(), "Download Info", JOptionPane.PLAIN_MESSAGE, new ImageIcon("../GIFs/Info.gif"));
+                else if (SwingUtilities.isLeftMouseButton(e))
+                    selecting(panel, name, speed);
             }
         });
+
+        fillProgressBar();
 
         return panel;
     }
@@ -137,5 +155,53 @@ public class MyFile {
     private String myToString() {
         return "Name: " + getName() + "\n\nSize: " + getSize() + " " + getScale() + "\n\nPercent of Download: " + getPercent() + "\n\nSpeed: "
                 + getSpeed() + "\n\nLink: " + getLink() + "\n\nDirectory: " + getDirectory() + "\n\nTime of Start: " + getTime();
+    }
+
+    private void fillProgressBar() {
+        Timer t;
+        final int[] c = {getPercent()};
+        final int waitingTime = 15 * 1000; //15 seconds
+        final int delay = waitingTime / 100;
+
+        t = new Timer(delay, e -> {
+            if(c[0] <= 100) {
+                progressBar.setValue(++ c[0]);
+                setPercent(c[0]);
+                progressBar.setString(getPercent() / 100.0 * getSize() + " " + getScale() + " / " + getSize() + getScale() + "  (" + getPercent() + "%)");
+            }
+        });
+
+        progressBar.setValue(c[0]);
+
+        t.setInitialDelay(3000);
+        t.start();
+
+        // adding a changeListener to the progress bar
+        progressBar.addChangeListener(e -> {
+            if(progressBar.getValue() == 100) {
+                t.stop();
+                JOptionPane.showMessageDialog(null, "Download Completed!");
+            }
+        });
+    }
+
+    private void selecting(JPanel panel, JLabel name, JLabel speed) {
+        if (!isSelected) {
+            panel.setBackground(Color.LIGHT_GRAY);
+            name.setBackground(Color.LIGHT_GRAY);
+            name.setForeground(Color.BLACK);
+            speed.setBackground(Color.LIGHT_GRAY);
+            speed.setForeground(Color.BLACK);
+
+            isSelected = true;
+        } else {
+            panel.setBackground(Color.DARK_GRAY);
+            name.setBackground(Color.DARK_GRAY);
+            name.setForeground(Color.LIGHT_GRAY);
+            speed.setBackground(Color.DARK_GRAY);
+            speed.setForeground(Color.LIGHT_GRAY);
+
+            isSelected = false;
+        }
     }
 }

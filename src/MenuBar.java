@@ -76,15 +76,25 @@ public class MenuBar {
 
         menuItem = new JMenuItem("Check for Updates...");
         menuItem.setMnemonic(KeyEvent.VK_U);
-        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_U, InputEvent.SHIFT_MASK));
+        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_U, InputEvent.CTRL_MASK));
+        menuItem.addActionListener(e -> JOptionPane.showMessageDialog(frame, "There is not any newer version :(",
+                "Check For Updates...", JOptionPane.PLAIN_MESSAGE, new ImageIcon("../GIFs/Update.gif")));
+
+        menu.add(menuItem);
+
+        menuItem = new JMenuItem("Register...");
+        menuItem.setMnemonic(KeyEvent.VK_R);
+        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, InputEvent.CTRL_MASK));
+        menuItem.addActionListener(e -> JOptionPane.showMessageDialog(frame, "You are REGISTERED! :)",
+                "Register...", JOptionPane.PLAIN_MESSAGE, new ImageIcon("../GIFs/Thank you.gif")));
 
         menu.add(menuItem);
 
         menuItem = new JMenuItem("About");
         menuItem.setMnemonic(KeyEvent.VK_A);
-        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, InputEvent.SHIFT_MASK));
-        menuItem.addActionListener(e -> JOptionPane.showMessageDialog(null, "Developer: Sepehr Akhoundi" +
-                        "\nID Number: 9631002\n\nDate of Start: 2018/12/05\nDate of End: \n\nYou can use Tomato Downloader EASY & FREE!",
+        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, InputEvent.CTRL_MASK));
+        menuItem.addActionListener(e -> JOptionPane.showMessageDialog(frame, "\nWavy Downloader!\n\nDeveloper: Sepehr Akhoundi" +
+                        "\nID Number: 9631002\n\nDate of Start: 2018/12/05\nDate of End: \n\nYou can use Wavy Downloader EASY & FREE!",
                 "About", JOptionPane.PLAIN_MESSAGE, new ImageIcon("../GIFs/About.gif")));
 
         menu.add(menuItem);

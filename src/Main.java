@@ -5,7 +5,8 @@ import java.awt.event.WindowEvent;
 
 public class Main {
 
-    public static Container basicPane;
+    private static JMenuBar basicMenuBar;
+    private static JPanel basicToolbarPanel, basicMainMenuPanel;
 
     public static void main(String[] args) {
         MainFrame mainFrame = new MainFrame();
@@ -14,20 +15,20 @@ public class Main {
         MenuBar menuBar = new MenuBar();
         MainMenu mainMenu = new MainMenu();
 
-        for (UIManager.LookAndFeelInfo info: UIManager.getInstalledLookAndFeels()) {
-            if ("Nimbus".equals(info.getName())) {
-                try {
-                    UIManager.setLookAndFeel(info.getClassName());
-                } catch (ClassNotFoundException | InstantiationException | UnsupportedLookAndFeelException | IllegalAccessException e) {
-                    e.printStackTrace();
-                }
-            }
+        try {
+            UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) {
+            e.printStackTrace();
         }
 
-        mainFrame.getMainFrame().setJMenuBar(menuBar.createMenu(mainFrame.getMainFrame()));
+        basicMenuBar = menuBar.createMenu(mainFrame.getMainFrame());
+        mainFrame.getMainFrame().setJMenuBar(basicMenuBar);
 
-        mainFrame.getMainFrame().add(toolbar.createButtons(mainFrame.getMainFrame()), BorderLayout.NORTH);
-        mainFrame.getMainFrame().add(mainMenu.createMainMenu(), BorderLayout.WEST);
+        basicToolbarPanel = toolbar.createButtons(mainFrame.getMainFrame());
+        mainFrame.getMainFrame().add(basicToolbarPanel, BorderLayout.NORTH);
+
+        basicMainMenuPanel = mainMenu.createMainMenu();
+        mainFrame.getMainFrame().add(basicMainMenuPanel, BorderLayout.WEST);
 
 //        mainFrame.getMainFrame().add(filePanel.createDownloadPanel("GTA"));
 
@@ -50,7 +51,6 @@ public class Main {
             }
         });
 
-        basicPane = mainFrame.getMainFrame().getContentPane();
 //        mainFrame.getMainFrame().pack();
         mainFrame.getMainFrame().setVisible(true);
     }
@@ -59,8 +59,17 @@ public class Main {
         JScrollPane scrollPane = new JScrollPane(panel);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        frame.getContentPane().add(scrollPane, BorderLayout.CENTER);
+
+        frame.setJMenuBar(basicMenuBar);
+
+        frame.add(basicToolbarPanel, BorderLayout.NORTH);
+
+        frame.add(basicMainMenuPanel, BorderLayout.WEST);
+
+        frame.add(scrollPane, BorderLayout.CENTER);
+
         frame.invalidate();
         frame.repaint();
+        SwingUtilities.updateComponentTreeUI(frame);
     }
 }

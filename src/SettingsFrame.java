@@ -7,6 +7,7 @@ public class SettingsFrame {
 
     public static void createSettings(JFrame frame) {
         JFrame settingsFrame = new JFrame("Settings");
+        settingsFrame.setIconImage(new ImageIcon("../Images/Setting.png").getImage());
         JPanel panel  = new JPanel(new GridBagLayout());
 
         settingsFrame.setBounds(frame.getX() + 20, frame.getY() + 20, 50, 50);

@@ -18,6 +18,14 @@ public class MainFrame extends JFrame {
         mainFrame.setBackground(Color.BLACK);
 
         mainFrame.setLayout(new BorderLayout(1, 1));
+
+        JLabel initialLabel = new JLabel("There is no download yet!", SwingConstants.CENTER);
+        initialLabel.setBackground(Color.BLACK);
+        initialLabel.setForeground(Color.LIGHT_GRAY);
+        JPanel initialPanel = new JPanel(new BorderLayout());
+        initialPanel.add(initialLabel, BorderLayout.CENTER);
+        initialPanel.setBackground(Color.DARK_GRAY);
+        mainFrame.getContentPane().add(initialPanel, BorderLayout.CENTER);
     }
 
     public JFrame getMainFrame() {

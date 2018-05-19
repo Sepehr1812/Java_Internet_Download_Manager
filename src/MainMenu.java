@@ -4,8 +4,9 @@ import java.awt.*;
 public class MainMenu {
 
     public JPanel createMainMenu() {
-        JPanel panel = new JPanel(new GridLayout(3, 1));
+        JPanel panel = new JPanel(new GridLayout(4, 1));
 
+        panel.add(createButton("All", "All"));
         panel.add(createButton("Processing", "Processing"));
         panel.add(createButton("Completed", "Completed"));
         panel.add(createButton("Queue", "Queue"));
