@@ -31,21 +31,25 @@ public class MenuBar {
                 case 1:
                     menuItem.setMnemonic(KeyEvent.VK_R);
                     menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, InputEvent.SHIFT_MASK));
+                    menuItem.addActionListener(e -> SelectActions.resume());
 
                     break;
                 case 2:
                     menuItem.setMnemonic(KeyEvent.VK_P);
                     menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P, InputEvent.SHIFT_MASK));
+                    menuItem.addActionListener(e -> SelectActions.pause());
 
                     break;
                 case 3:
                     menuItem.setMnemonic(KeyEvent.VK_C);
                     menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, InputEvent.SHIFT_MASK));
+                    menuItem.addActionListener(e -> SelectActions.cancel());
 
                     break;
                 case 4:
                     menuItem.setMnemonic(KeyEvent.VK_E);
                     menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E, InputEvent.CTRL_MASK));
+                    menuItem.addActionListener(e -> SelectActions.remove(frame));
 
                     break;
                 case 5:

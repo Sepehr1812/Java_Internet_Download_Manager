@@ -27,11 +27,14 @@ public class Toolbar{
 
         button = makeNavigationButton("ResumeAndPause100", "Resume or Pause downloading the file(s)!", "Resume");
         toolBar.add(button);
+        button.addActionListener(e -> SelectActions.pauseOrResume());
 
         button = makeNavigationButton("Cancel100", "Cancel downloading the file(s)!", "Cancel");
+        button.addActionListener(e -> SelectActions.cancel());
         toolBar.add(button);
 
         button = makeNavigationButton("Remove100", "Remove file from your list(s)!", "Remove");
+        button.addActionListener(e -> SelectActions.remove(frame));
         toolBar.add(button);
 
         button = makeNavigationButton("Setting100", "Go to settings!", "Settings");
@@ -54,12 +57,8 @@ public class Toolbar{
         JButton button = new JButton();
         button.setToolTipText(toolTipText);
 
-        //TODO
-//        button.addActionListener((ActionListener) this);
-
         button.setIcon(new ImageIcon(imgLocation, altText));
 
-//        button.setSize(50, 50);
         button.setBackground(Color.darkGray);
 
         return button;

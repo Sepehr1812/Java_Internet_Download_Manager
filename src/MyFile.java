@@ -12,7 +12,9 @@ public class MyFile {
     private double size, speed;
     private int percent;
     private JProgressBar progressBar = new JProgressBar(0, 100);
-    private boolean isSelected = false;
+    private boolean isSelected = false, isCanceled = false;
+    private Timer timer;
+    private JPanel panel;
 
 
     MyFile(String directory, double size, String scale, double speed, String time, int percent) {
@@ -64,7 +66,7 @@ public class MyFile {
         return percent;
     }
 
-    public void setPercent(int percent) {
+    private void setPercent(int percent) {
         this.percent = percent;
     }
 
@@ -72,12 +74,20 @@ public class MyFile {
         return isSelected;
     }
 
-    public void setSelected(boolean selected) {
-        isSelected = selected;
+    public Timer getTimer() {
+        return timer;
+    }
+
+    public boolean isNotCanceled() {
+        return !isCanceled;
+    }
+
+    public void setCanceled(boolean canceled) {
+        isCanceled = canceled;
     }
 
     public JPanel convertToJPanel() {
-        JPanel panel = new JPanel(new GridLayout(3, 1, 1, 1));
+        panel = new JPanel(new GridLayout(3, 1, 1, 1));
         panel.setBackground(Color.DARK_GRAY);
         panel.setForeground(Color.LIGHT_GRAY);
 
@@ -158,12 +168,11 @@ public class MyFile {
     }
 
     private void fillProgressBar() {
-        Timer t;
         final int[] c = {getPercent()};
         final int waitingTime = 15 * 1000; //15 seconds
         final int delay = waitingTime / 100;
 
-        t = new Timer(delay, e -> {
+        timer = new Timer(delay, e -> {
             if(c[0] <= 100) {
                 progressBar.setValue(++ c[0]);
                 setPercent(c[0]);
@@ -173,35 +182,62 @@ public class MyFile {
 
         progressBar.setValue(c[0]);
 
-        t.setInitialDelay(3000);
-        t.start();
+        timer.setInitialDelay(3000);
+        timer.start();
 
         // adding a changeListener to the progress bar
         progressBar.addChangeListener(e -> {
             if(progressBar.getValue() == 100) {
-                t.stop();
+                timer.stop();
                 JOptionPane.showMessageDialog(null, "Download Completed!");
             }
         });
     }
 
     private void selecting(JPanel panel, JLabel name, JLabel speed) {
-        if (!isSelected) {
-            panel.setBackground(Color.LIGHT_GRAY);
-            name.setBackground(Color.LIGHT_GRAY);
-            name.setForeground(Color.BLACK);
-            speed.setBackground(Color.LIGHT_GRAY);
-            speed.setForeground(Color.BLACK);
+        if (! isCanceled) {
+            if (! isSelected) {
+                panel.setBackground(Color.LIGHT_GRAY);
+                name.setBackground(Color.LIGHT_GRAY);
+                name.setForeground(Color.BLACK);
+                speed.setBackground(Color.LIGHT_GRAY);
+                speed.setForeground(Color.BLACK);
 
-            isSelected = true;
+                isSelected = true;
+            } else {
+                panel.setBackground(Color.DARK_GRAY);
+                name.setBackground(Color.DARK_GRAY);
+                name.setForeground(Color.LIGHT_GRAY);
+                speed.setBackground(Color.DARK_GRAY);
+                speed.setForeground(Color.LIGHT_GRAY);
+
+                isSelected = false;
+            }
         } else {
-            panel.setBackground(Color.DARK_GRAY);
-            name.setBackground(Color.DARK_GRAY);
-            name.setForeground(Color.LIGHT_GRAY);
-            speed.setBackground(Color.DARK_GRAY);
-            speed.setForeground(Color.LIGHT_GRAY);
+            if (! isSelected) {
+                Color cancelColor = new Color(217,  17, 27);
 
-            isSelected = false;
+                panel.setBackground(cancelColor);
+                name.setBackground(Color.LIGHT_GRAY);
+                name.setForeground(Color.BLACK);
+                speed.setBackground(Color.LIGHT_GRAY);
+                speed.setForeground(Color.BLACK);
+
+                isSelected = true;
+            } else {
+                Color cancelColor = new Color(126, 10, 16);
+
+                panel.setBackground(cancelColor);
+
+                isSelected = false;
+            }
         }
+    }
+
+    public void canceling() {
+        Color cancelColor = new Color(126, 10, 16);
+        panel.setBackground(cancelColor);
+
+        isSelected = false;
     }
 }
