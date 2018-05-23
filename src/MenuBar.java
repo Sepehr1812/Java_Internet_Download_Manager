@@ -22,10 +22,7 @@ public class MenuBar {
                 case 0:
                     menuItem.setMnemonic(KeyEvent.VK_N);
                     menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_MASK));
-                    menuItem.addActionListener(e -> {
-                            MyFile newFile = NewDownload.startNewDownload(frame);
-                            FilePanel.addToMainPanel(frame, newFile);
-                    });
+                    menuItem.addActionListener(e -> NewDownload.startNewDownload(frame));
 
                     break;
                 case 1:
@@ -71,6 +68,32 @@ public class MenuBar {
 
             menu.add(menuItem);
         }
+
+        menuBar.add(menu);
+
+        menu = new JMenu("Queue");
+        menu.setMnemonic(KeyEvent.VK_Q);
+
+        menuItem = new JMenuItem("Add to Queue");
+        menuItem.setMnemonic(KeyEvent.VK_A);
+        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_D, InputEvent.CTRL_MASK));
+        menuItem.addActionListener(e -> SelectActions.addToQueue());
+
+        menu.add(menuItem);
+
+        menuItem = new JMenuItem("Remove from Queue");
+        menuItem.setMnemonic(KeyEvent.VK_R);
+        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_M, InputEvent.CTRL_MASK));
+        menuItem.addActionListener(e -> SelectActions.removeFromQueue());
+
+        menu.add(menuItem);
+
+        menuItem = new JMenuItem("Swap");
+        menuItem.setMnemonic(KeyEvent.VK_S);
+        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_W, InputEvent.CTRL_MASK));
+        menuItem.addActionListener(e -> SelectActions.swapInQueue());
+
+        menu.add(menuItem);
 
         menuBar.add(menu);
 

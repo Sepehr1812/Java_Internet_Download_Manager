@@ -4,6 +4,7 @@ import java.awt.*;
 public class SettingsFrame {
 
     private static String directory = "C://Users/suzi/Desktop";
+    private static boolean[] selectionOfRadioButtons = {true, false, false};
 
     public static void createSettings(JFrame frame) {
         JFrame settingsFrame = new JFrame("Settings");
@@ -47,23 +48,25 @@ public class SettingsFrame {
         ButtonGroup radioButtonGroup = new ButtonGroup();
 
         JRadioButton[] option =  new JRadioButton[3];
-        option[0] = new JRadioButton("Default", true);
+        option[0] = new JRadioButton("Default", selectionOfRadioButtons[0]);
         radioButtonGroup.add(option[0]);
         radioGroupContainer.add(option[0]);
 
-        option[1] = new JRadioButton("Nimbus", false);
+        option[1] = new JRadioButton("Nimbus", selectionOfRadioButtons[1]);
         radioButtonGroup.add(option[1]);
         radioGroupContainer.add(option[1]);
 
-        option[2] = new JRadioButton("Motif", false);
+        option[2] = new JRadioButton("Motif", selectionOfRadioButtons[2]);
         radioButtonGroup.add(option[2]);
         radioGroupContainer.add(option[2]);
 
         JButton okButton = new JButton("OK");
         okButton.addActionListener(e -> {
-            for (JRadioButton anOption : option) {
-                if (anOption.isSelected())
-                    setLookAndFeel(anOption.getText(), frame);
+            for (int i = 0; i < 3; i ++) {
+                if (option[i].isSelected()) {
+                    setLookAndFeel(option[i].getText(), frame);
+                    selectionOfRadioButtons[i] = true;
+                } else selectionOfRadioButtons[i] = false;
             }
             settingsFrame.setVisible(false);
         });
@@ -95,7 +98,9 @@ public class SettingsFrame {
     private static void setColors(Component... components) {
         for (Component component : components) {
             component.setBackground(Color.DARK_GRAY);
-            component.setForeground(Color.LIGHT_GRAY);
+            if (component instanceof JButton)
+                component.setForeground(Color.GRAY);
+            else component.setForeground(Color.LIGHT_GRAY);
         }
     }
 

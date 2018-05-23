@@ -19,10 +19,7 @@ public class Toolbar{
 
         //Adding buttons.
         button = makeNavigationButton("New100", "Start a new download!", "New Download");
-        button.addActionListener(e -> {
-            MyFile newFile = NewDownload.startNewDownload(frame);
-            FilePanel.addToMainPanel(frame, newFile);
-        });
+        button.addActionListener(e -> NewDownload.startNewDownload(frame));
         toolBar.add(button);
 
         button = makeNavigationButton("ResumeAndPause100", "Resume or Pause downloading the file(s)!", "Resume");

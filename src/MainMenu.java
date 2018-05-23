@@ -3,20 +3,20 @@ import java.awt.*;
 
 public class MainMenu {
 
-    public JPanel createMainMenu() {
+    public JPanel createMainMenu(JFrame frame) {
         JPanel panel = new JPanel(new GridLayout(4, 1));
 
-        panel.add(createButton("All", "All"));
-        panel.add(createButton("Processing", "Processing"));
-        panel.add(createButton("Completed", "Completed"));
-        panel.add(createButton("Queue", "Queue"));
+        panel.add(createButton("All", "All", frame));
+        panel.add(createButton("Processing", "Processing", frame));
+        panel.add(createButton("Completed", "Completed", frame));
+        panel.add(createButton("Queue", "Queue", frame));
 
         panel.setBackground(Color.darkGray);
 
         return panel;
     }
 
-    private JButton createButton(String imageName, String altText) {
+    private JButton createButton(String imageName, String altText, JFrame frame) {
         String imgLocation = "../Images/" + imageName + "25.png";
 
         //Create and initialize the button.
@@ -24,12 +24,21 @@ public class MainMenu {
         button.setBackground(Color.BLACK);
         button.setForeground(Color.WHITE);
 
-        //TODO
-//       button.addActionListener((ActionListener) this);
+        switch (imageName) {
+            case "All":
+                button.addActionListener(e -> FilePanel.updateMainPanel(frame));
+                break;
+            case "Processing":
+                button.addActionListener(e -> FilePanel.updateProcessingMenu(frame));
+                break;
+            case "Completed":
+                button.addActionListener(e -> FilePanel.updateCompletedMenu(frame));
+                break;
+            case "Queue":
+                button.addActionListener(e -> FilePanel.updateQueueMenu(frame));
+                break;
+        }
 
-//        button.setIcon(new ImageIcon(imgLocation, altText));
-
-//        button.setSize(50, 50);
 
         return button;
     }

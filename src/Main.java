@@ -27,7 +27,7 @@ public class Main {
         basicToolbarPanel = toolbar.createButtons(mainFrame.getMainFrame());
         mainFrame.getMainFrame().add(basicToolbarPanel, BorderLayout.NORTH);
 
-        basicMainMenuPanel = mainMenu.createMainMenu();
+        basicMainMenuPanel = mainMenu.createMainMenu(mainFrame.getMainFrame());
         mainFrame.getMainFrame().add(basicMainMenuPanel, BorderLayout.WEST);
 
 //        mainFrame.getMainFrame().add(filePanel.createDownloadPanel("GTA"));

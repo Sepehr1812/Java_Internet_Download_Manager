@@ -15,7 +15,7 @@ public class MyFile {
     private boolean isSelected = false, isCanceled = false;
     private Timer timer;
     private JPanel panel;
-
+    private boolean isProcessing = false, isCompleted = false, isInQueue = false;
 
     MyFile(String directory, double size, String scale, double speed, String time, int percent) {
         this.directory = directory;
@@ -74,6 +74,10 @@ public class MyFile {
         return isSelected;
     }
 
+    public void setSelected(boolean selected) {
+        isSelected = selected;
+    }
+
     public Timer getTimer() {
         return timer;
     }
@@ -84,6 +88,30 @@ public class MyFile {
 
     public void setCanceled(boolean canceled) {
         isCanceled = canceled;
+    }
+
+    public boolean isProcessing() {
+        return isProcessing;
+    }
+
+    public void setProcessing(boolean processing) {
+        isProcessing = processing;
+    }
+
+    public boolean isCompleted() {
+        return isCompleted;
+    }
+
+    public void setCompleted(boolean completed) {
+        isCompleted = completed;
+    }
+
+    public boolean isInQueue() {
+        return isInQueue;
+    }
+
+    public void setInQueue(boolean inQueue) {
+        isInQueue = inQueue;
     }
 
     public JPanel convertToJPanel() {
@@ -190,6 +218,9 @@ public class MyFile {
             if(progressBar.getValue() == 100) {
                 timer.stop();
                 JOptionPane.showMessageDialog(null, "Download Completed!");
+                isProcessing = false;
+                isCompleted = true;
+                isInQueue = false;
             }
         });
     }
