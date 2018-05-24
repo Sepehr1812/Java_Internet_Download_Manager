@@ -30,12 +30,6 @@ public class Main {
         basicMainMenuPanel = mainMenu.createMainMenu(mainFrame.getMainFrame());
         mainFrame.getMainFrame().add(basicMainMenuPanel, BorderLayout.WEST);
 
-//        mainFrame.getMainFrame().add(filePanel.createDownloadPanel("GTA"));
-
-
-//        mainFrame.getMainFrame().add(filePanel.createDownloadPanel("GTA", 500.26, 50), BorderLayout.CENTER);
-
-//        mainFrame.getMainFrame().setContentPane();
 
         mainFrame.getMainFrame().setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         mainFrame.getMainFrame().addWindowListener(new WindowAdapter() {
@@ -51,7 +45,6 @@ public class Main {
             }
         });
 
-//        mainFrame.getMainFrame().pack();
         mainFrame.getMainFrame().setVisible(true);
     }
 

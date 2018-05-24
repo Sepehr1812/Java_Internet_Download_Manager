@@ -136,9 +136,8 @@ public class MyFile {
                 if (e.getClickCount() == 2) {
                     try {
                         Desktop desktop = null;
-                        if (Desktop.isDesktopSupported()) {
+                        if (Desktop.isDesktopSupported())
                             desktop = Desktop.getDesktop();
-                        }
 
                         Objects.requireNonNull(desktop).open(new File(getDirectory() + "/" + getName()));
                     } catch (IOException ioe) {
@@ -210,8 +209,10 @@ public class MyFile {
 
         progressBar.setValue(c[0]);
 
-        timer.setInitialDelay(3000);
+        timer.setInitialDelay(NewDownload.initialDelay * 60 * 1000 + 3000);
+
         timer.start();
+        timer.setInitialDelay(3000);
 
         // adding a changeListener to the progress bar
         progressBar.addChangeListener(e -> {

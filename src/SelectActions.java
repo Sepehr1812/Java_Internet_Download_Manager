@@ -5,17 +5,15 @@ public class SelectActions {
 
     public static void pause() {
         for (MyFile downloadFile : FilePanel.downloadFiles) {
-            if (downloadFile.isSelected()) {
+            if (downloadFile.isSelected())
                 downloadFile.getTimer().stop();
-            }
         }
     }
 
     public static void resume() {
         for (MyFile downloadFile : FilePanel.downloadFiles) {
-            if (downloadFile.isSelected() && downloadFile.isNotCanceled()) {
+            if (downloadFile.isSelected() && downloadFile.isNotCanceled())
                 downloadFile.getTimer().start();
-            }
         }
     }
 

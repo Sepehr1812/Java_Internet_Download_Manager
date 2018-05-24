@@ -5,13 +5,15 @@ import java.util.Calendar;
 
 public class NewDownload {
 
+    public static int initialDelay;
+
     public static void startNewDownload(JFrame frame) {
         JFrame newFrame = new JFrame();
 
         newFrame.setSize(300, 200);
         newFrame.setLocationRelativeTo(frame);
 
-        JPanel panel = new JPanel(new GridLayout(4, 2, 10, 10));
+        JPanel panel = new JPanel(new GridLayout(5, 2, 10, 10));
         newFrame.setContentPane(panel);
 
         JLabel linkLabel = new JLabel("Your Download Link: ");
@@ -29,6 +31,11 @@ public class NewDownload {
         JCheckBox checkBox = new JCheckBox("Add", false);
         checkBox.setHorizontalAlignment(SwingConstants.LEFT);
 
+        JLabel scheduleLabel = new JLabel("Delay before starting (min): ");
+        scheduleLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+        SpinnerNumberModel spinnerNumberModel = new SpinnerNumberModel(0, 0, Integer.SIZE, 1);
+        JSpinner scheduleSpinner = new JSpinner(spinnerNumberModel);
+
         JButton startButton = new JButton(" start ");
         startButton.addActionListener(e -> {
             MyFile file = new MyFile(SettingsFrame.getDirectory(), 500.00, "MB", 850.0,
@@ -41,6 +48,8 @@ public class NewDownload {
                 file.setInQueue(true);
             else file.setInQueue(false);
 
+            initialDelay = (int) scheduleSpinner.getValue();
+
             FilePanel.addToMainPanel(frame, file);
             newFrame.setVisible(false);
         });
@@ -48,18 +57,19 @@ public class NewDownload {
         JButton cancelButton = new JButton(" Cancel ");
         cancelButton.addActionListener(e -> newFrame.setVisible(false));
 
-        newFrame.add(linkLabel);
-        newFrame.add(link);
-        newFrame.add(nameLabel);
-        newFrame.add(name);
-        newFrame.add(queueLabel);
-        newFrame.add(checkBox);
-        newFrame.add(startButton);
-        newFrame.add(cancelButton);
+        panel.add(linkLabel);
+        panel.add(link);
+        panel.add(nameLabel);
+        panel.add(name);
+        panel.add(queueLabel);
+        panel.add(checkBox);
+        panel.add(scheduleLabel);
+        panel.add(scheduleSpinner);
+        panel.add(startButton);
+        panel.add(cancelButton);
 
         newFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
         newFrame.setVisible(true);
-
     }
 }

@@ -8,7 +8,6 @@ public class MainFrame extends JFrame {
     MainFrame() {
         mainFrame = new JFrame("Wavy Downloader");
 
-//        URL iconURL = getClass().getResource("getResource");
         ImageIcon icon = new ImageIcon("../Images/Icon.png");
         mainFrame.setIconImage(icon.getImage());
 

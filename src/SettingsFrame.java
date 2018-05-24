@@ -12,15 +12,12 @@ public class SettingsFrame {
         JPanel panel  = new JPanel(new GridBagLayout());
 
         settingsFrame.setBounds(frame.getX() + 20, frame.getY() + 20, 50, 50);
-//        settingsFrame.setLayout(new GridBagLayout());
 
 
         JLabel limitLabel = new JLabel("Number of downloading files at the same time (0 for unlimited):", SwingConstants.LEFT);
 
         SpinnerNumberModel spinnerNumberModel = new SpinnerNumberModel(0, 0, Integer.SIZE, 1);
         JSpinner limitSpinner = new JSpinner(spinnerNumberModel);
-
-//        limitSpinner.setMaximumSize(new Dimension(20, 10));
 
         JLabel fileLocationLabel = new JLabel("Choose the directory you want save your files:", SwingConstants.LEFT);
 
@@ -32,13 +29,9 @@ public class SettingsFrame {
             chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
             chooser.setAcceptAllFileFilterUsed(false);
 
-            if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
-//                System.out.println("getCurrentDirectory(): " + chooser.getCurrentDirectory());
+            if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION)
                 directory = chooser.getSelectedFile().getAbsolutePath();
-
-            } else {
-                System.out.println("No Selection");
-            }
+            else System.out.println("No Selection.");
         });
 
         JLabel setLAFLabel = new JLabel("Set one of these look-and-feels for Wavy Downloader:", SwingConstants.LEFT);
