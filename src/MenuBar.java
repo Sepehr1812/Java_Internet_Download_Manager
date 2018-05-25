@@ -61,7 +61,11 @@ public class MenuBar {
                     menuItem.setMnemonic(KeyEvent.VK_X);
                     menuItem.setAccelerator(KeyStroke.getKeyStroke("control alt X"));
 
-                    menuItem.addActionListener(e -> System.exit(0));
+                    menuItem.addActionListener(e -> {
+                        FileManager.writeFiles(FilePanel.downloadFiles);
+                        FileManager.writeSettingsFile();
+                        System.exit(0);
+                    });
 
                     break;
             }

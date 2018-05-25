@@ -2,6 +2,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 public class Main {
 
@@ -16,9 +18,15 @@ public class Main {
         MainMenu mainMenu = new MainMenu();
 
         try {
-            UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) {
-            e.printStackTrace();
+            FileManager.readSettingsFile(mainFrame.getMainFrame());
+        } catch (IOException e1) {
+            try {
+                if (e1 instanceof FileNotFoundException)
+                    UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+                else e1.printStackTrace();
+            } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e2) {
+                e2.printStackTrace();
+            }
         }
 
         basicMenuBar = menuBar.createMenu(mainFrame.getMainFrame());
@@ -29,6 +37,9 @@ public class Main {
 
         basicMainMenuPanel = mainMenu.createMainMenu(mainFrame.getMainFrame());
         mainFrame.getMainFrame().add(basicMainMenuPanel, BorderLayout.WEST);
+
+        FileManager.readFiles();
+        FilePanel.updateMainPanel(mainFrame.getMainFrame());
 
 
         mainFrame.getMainFrame().setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);

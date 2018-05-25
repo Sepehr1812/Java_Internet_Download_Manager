@@ -32,6 +32,7 @@ public class SelectActions {
         for (int i = 0; i < FilePanel.downloadFiles.size(); i ++) {
             if (FilePanel.downloadFiles.get(i).isSelected()) {
                 FilePanel.downloadFiles.get(i).getTimer().stop();
+                FileManager.addToRemovedList(FilePanel.downloadFiles.get(i));
                 FilePanel.downloadFiles.remove(i);
                 FilePanel.downloadPanels.remove(i);
             }
@@ -78,19 +79,16 @@ public class SelectActions {
             if (FilePanel.downloadFiles.get(i).isSelected() && FilePanel.downloadFiles.get(i).isInQueue()) {
                 numberOfSelectedFiles ++;
 
-                if (numberOfSelectedFiles == 1) {
+                if (numberOfSelectedFiles == 1)
                     fileNumberOne = i;
-                    System.out.println("number one");
-                } else if (numberOfSelectedFiles == 2) {
+                else if (numberOfSelectedFiles == 2)
                     fileNumberTwo = i;
-                    System.out.println("number two");
-                } else if (numberOfSelectedFiles == 3)
+                else if (numberOfSelectedFiles == 3)
                     break;
             }
         }
 
         if (numberOfSelectedFiles == 2) {
-            System.out.println("set set");
             Collections.swap(FilePanel.downloadFiles, fileNumberOne, fileNumberTwo);
             Collections.swap(FilePanel.downloadPanels, fileNumberOne, fileNumberTwo);
         }

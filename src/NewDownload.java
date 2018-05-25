@@ -8,10 +8,11 @@ public class NewDownload {
     public static int initialDelay;
 
     public static void startNewDownload(JFrame frame) {
-        JFrame newFrame = new JFrame();
+        JFrame newFrame = new JFrame("New Download");
 
-        newFrame.setSize(300, 200);
+        newFrame.setSize(400, 200);
         newFrame.setLocationRelativeTo(frame);
+        newFrame.setIconImage(new ImageIcon("../Images/New Download Icon.png").getImage());
 
         JPanel panel = new JPanel(new GridLayout(5, 2, 10, 10));
         newFrame.setContentPane(panel);
@@ -51,11 +52,14 @@ public class NewDownload {
             initialDelay = (int) scheduleSpinner.getValue();
 
             FilePanel.addToMainPanel(frame, file);
+
             newFrame.setVisible(false);
         });
 
         JButton cancelButton = new JButton(" Cancel ");
         cancelButton.addActionListener(e -> newFrame.setVisible(false));
+
+        setColors(panel, linkLabel, link, nameLabel, name, queueLabel, checkBox, scheduleLabel, scheduleSpinner, startButton, cancelButton);
 
         panel.add(linkLabel);
         panel.add(link);
@@ -71,5 +75,12 @@ public class NewDownload {
         newFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
         newFrame.setVisible(true);
+    }
+
+    private static void setColors(Component... components) {
+        for (Component component : components) {
+            component.setBackground(Color.DARK_GRAY);
+            component.setForeground(Color.LIGHT_GRAY);
+        }
     }
 }

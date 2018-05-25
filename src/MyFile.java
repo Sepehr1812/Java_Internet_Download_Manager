@@ -4,9 +4,12 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.Objects;
 
-public class MyFile {
+public class MyFile implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private String name, link, directory, scale, time;
     private double size, speed;
@@ -26,11 +29,11 @@ public class MyFile {
         this.percent = percent;
     }
 
-    private String getName() {
+    public String getName() {
         return name;
     }
 
-    private String getLink() {
+    public String getLink() {
         return link;
     }
 
@@ -133,7 +136,7 @@ public class MyFile {
              */
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (e.getClickCount() == 2) {
+                if (e.getClickCount() == 2 && isCompleted) {
                     try {
                         Desktop desktop = null;
                         if (Desktop.isDesktopSupported())
@@ -185,6 +188,9 @@ public class MyFile {
         });
 
         fillProgressBar();
+
+        if (isCanceled)
+            canceling();
 
         return panel;
     }

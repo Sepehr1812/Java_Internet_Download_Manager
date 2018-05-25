@@ -20,9 +20,8 @@ public class FilePanel{
 
         mainPanel.setLayout(new GridLayout(downloadPanels.size(), 0, 1, 1));
 
-        for (JPanel downloadPanel : downloadPanels) {
+        for (JPanel downloadPanel : downloadPanels)
             mainPanel.add(downloadPanel);
-        }
 
         Main.createDownloadPane(frame, mainPanel);
     }
@@ -40,9 +39,8 @@ public class FilePanel{
         } else
             mainPanel.setLayout(new GridLayout(downloadPanels.size(), 0, 1, 1));
 
-        for (JPanel downloadPanel : downloadPanels) {
+        for (JPanel downloadPanel : downloadPanels)
             mainPanel.add(downloadPanel);
-        }
 
         Main.createDownloadPane(frame, mainPanel);
     }
