@@ -70,4 +70,30 @@ public class FileManager {
             e.printStackTrace();
         }
     }
+
+    public static void writeBannedLinksFile() {
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("../Data/BannedLinks.wavy"))) {
+            oos.writeObject(SettingsFrame.getBannedAddressesArray());
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            System.err.println("File didn't find.");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void readBannedLinksFile() {
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("../Data/BannedLinks.wavy"))) {
+            try {
+                SettingsFrame.setBannedAddressesArray((ArrayList<String>) ois.readObject());
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            System.err.println("File didn't find.");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

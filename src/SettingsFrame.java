@@ -8,7 +8,7 @@ public class SettingsFrame {
     private static String directory = "C://Users/suzi/Desktop";
     private static boolean[] selectionOfRadioButtons = {true, false, false};
     private static int limitNumber = 0;
-    private static ArrayList<String> bannedAddresses = new ArrayList<>();
+    private static ArrayList<String> bannedAddressesArray = new ArrayList<>();
 
     public static void createSettings(JFrame frame) {
         JFrame settingsFrame = new JFrame("Settings");
@@ -38,9 +38,16 @@ public class SettingsFrame {
             else System.out.println("No Selection.");
         });
 
-        JLabel bannedAddressesLabel = new JLabel("Banned Addresses: ", SwingConstants.LEFT);
+        JLabel bannedAddressesLabel = new JLabel("Banned Addresses (Enter a new line after each link): ", SwingConstants.LEFT);
 
         JTextArea bannedAddresses = new JTextArea(10, 30);
+
+        String buffString = "";
+        for (String aBannedAddress : bannedAddressesArray) {
+            buffString = buffString.concat(aBannedAddress + "\n");
+        }
+        bannedAddresses.setText(buffString);
+
         bannedAddresses.setBackground(Color.LIGHT_GRAY);
         bannedAddresses.setForeground(Color.DARK_GRAY);
         JScrollPane scrollPaneForTextArea = new JScrollPane(bannedAddresses);
@@ -73,6 +80,18 @@ public class SettingsFrame {
                     setLookAndFeel(option[i].getText(), frame);
                     selectionOfRadioButtons[i] = true;
                 } else selectionOfRadioButtons[i] = false;
+            }
+
+            char[] buffCharArray = bannedAddresses.getText().toCharArray();
+            bannedAddressesArray.clear();
+            String aBannedAddress;
+            int lastBachSlashN = 0;
+            for (int i = 0; i < buffCharArray.length; i ++) {
+                if (buffCharArray[i] == '\n') {
+                    aBannedAddress = bannedAddresses.getText().substring(lastBachSlashN, i);
+                    lastBachSlashN = i + 1;
+                    bannedAddressesArray.add(aBannedAddress);
+                }
             }
 
             settingsFrame.setVisible(false);
@@ -154,6 +173,14 @@ public class SettingsFrame {
 
     public static String getDirectory() {
         return directory;
+    }
+
+    public static ArrayList<String> getBannedAddressesArray() {
+        return bannedAddressesArray;
+    }
+
+    public static void setBannedAddressesArray(ArrayList<String> bannedAddressesArray) {
+        SettingsFrame.bannedAddressesArray = bannedAddressesArray;
     }
 
     public static SettingsFile createSettingsFile() {

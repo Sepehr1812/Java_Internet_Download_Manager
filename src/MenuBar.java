@@ -13,7 +13,7 @@ public class MenuBar {
         menu.setMnemonic(KeyEvent.VK_D);
         menuBar.add(menu);
 
-        String[] menuItems = {"New Download", "Resume", "Pause", "Cancel", "Remove", "Settings", "Exit"};
+        String[] menuItems = {"New Download", "Resume", "Pause", "Cancel", "Remove", "Search", "Settings", "Exit"};
 
         for (int i = 0; i < menuItems.length; i ++) {
             menuItem = new JMenuItem(menuItems[i]);
@@ -50,13 +50,21 @@ public class MenuBar {
 
                     break;
                 case 5:
+                    menu.addSeparator();
+                    menuItem.setMnemonic(KeyEvent.VK_A);
+                    menuItem.setAccelerator(KeyStroke.getKeyStroke("control shift S"));
+
+                    menuItem.addActionListener(e -> SearchAndSort.searchFrame(frame));
+
+                    break;
+                case 6:
                     menuItem.setMnemonic(KeyEvent.VK_S);
                     menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_MASK));
 
                     menuItem.addActionListener(e -> SettingsFrame.createSettings(frame));
 
                     break;
-                case 6:
+                case 7:
                     menu.addSeparator();
                     menuItem.setMnemonic(KeyEvent.VK_X);
                     menuItem.setAccelerator(KeyStroke.getKeyStroke("control alt X"));
@@ -64,6 +72,7 @@ public class MenuBar {
                     menuItem.addActionListener(e -> {
                         FileManager.writeFiles(FilePanel.downloadFiles);
                         FileManager.writeSettingsFile();
+                        FileManager.writeBannedLinksFile();
                         System.exit(0);
                     });
 

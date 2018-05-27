@@ -29,6 +29,9 @@ public class Main {
             }
         }
 
+        FileManager.readBannedLinksFile();
+
+
         basicMenuBar = menuBar.createMenu(mainFrame.getMainFrame());
         mainFrame.getMainFrame().setJMenuBar(basicMenuBar);
 

@@ -17,6 +17,8 @@ public class NewDownload {
         JPanel panel = new JPanel(new GridLayout(5, 2, 10, 10));
         newFrame.setContentPane(panel);
 
+        final MyFile[] file = new MyFile[1];
+
         JLabel linkLabel = new JLabel("Your Download Link: ");
         linkLabel.setHorizontalAlignment(SwingConstants.RIGHT);
         JTextField link = new JTextField();
@@ -39,21 +41,29 @@ public class NewDownload {
 
         JButton startButton = new JButton(" start ");
         startButton.addActionListener(e -> {
-            MyFile file = new MyFile(SettingsFrame.getDirectory(), 500.00, "MB", 850.0,
-                    new SimpleDateFormat("yyyy/MM/dd , HH:mm:ss").format(Calendar.getInstance().getTime()), 0);
+            if (! isLinkBanned(link.getText())) {
+                file[0] = new MyFile(SettingsFrame.getDirectory(), 500.00, "MB", 850.0,
+                        new SimpleDateFormat("yyyy/MM/dd , HH:mm:ss").format(Calendar.getInstance().getTime()), 0);
 
-            file.setLink(link.getText());
-            file.setName(name.getText());
+                file[0].setLink(link.getText());
+                file[0].setName(name.getText());
 
-            if (checkBox.isSelected())
-                file.setInQueue(true);
-            else file.setInQueue(false);
+                if (checkBox.isSelected())
+                    file[0].setInQueue(true);
+                else file[0].setInQueue(false);
 
-            initialDelay = (int) scheduleSpinner.getValue();
+                initialDelay = (int) scheduleSpinner.getValue();
 
-            FilePanel.addToMainPanel(frame, file);
+                FilePanel.addToMainPanel(frame, file[0]);
 
-            newFrame.setVisible(false);
+                newFrame.setVisible(false);
+            } else {
+                JOptionPane.showMessageDialog(newFrame, "You banned this link before.\n" +
+                        "Enter another link or remove this link from banned addresses list in Settings.", "Banned Address", JOptionPane.ERROR_MESSAGE);
+
+                newFrame.setVisible(false);
+                startNewDownload(frame);
+            }
         });
 
         JButton cancelButton = new JButton(" Cancel ");
@@ -82,5 +92,14 @@ public class NewDownload {
             component.setBackground(Color.DARK_GRAY);
             component.setForeground(Color.LIGHT_GRAY);
         }
+    }
+
+    private static boolean isLinkBanned(String inputLink) {
+        for (String bannedAddress : SettingsFrame.getBannedAddressesArray()) {
+            if (inputLink.startsWith(bannedAddress))
+                return true;
+        }
+
+        return false;
     }
 }

@@ -30,7 +30,7 @@ public class Toolbar{
         button.addActionListener(e -> SelectActions.cancel());
         toolBar.add(button);
 
-        button = makeNavigationButton("Remove100", "Remove file from your list(s)!", "Remove");
+        button = makeNavigationButton("Remove100", "Remove file(s) from your list!", "Remove");
         button.addActionListener(e -> SelectActions.remove(frame));
         toolBar.add(button);
 

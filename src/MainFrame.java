@@ -11,7 +11,7 @@ public class MainFrame extends JFrame {
         ImageIcon icon = new ImageIcon("../Images/Icon.png");
         mainFrame.setIconImage(icon.getImage());
 
-        mainFrame.setSize(720, 500);
+        mainFrame.setSize(750, 500);
         mainFrame.setLocation(100, 100);
 
         mainFrame.setBackground(Color.BLACK);
