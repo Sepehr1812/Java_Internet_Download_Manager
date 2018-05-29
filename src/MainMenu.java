@@ -1,5 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
+import java.util.Objects;
 
 public class MainMenu {
 
@@ -18,10 +19,28 @@ public class MainMenu {
 
     private JButton createButton(String imageName, String altText, JFrame frame) {
         String imgLocation = "../Images/" + imageName + "25.png";
-
+        JButton button = null;
         //Create and initialize the button.
-        JButton button = new JButton(imageName, new ImageIcon(imgLocation, altText));
-        button.setBackground(Color.BLACK);
+        if (Main.isEnglish)
+            button = new JButton(imageName, new ImageIcon(imgLocation, altText));
+        else {
+            switch (imageName) {
+                case "All":
+                    button = new JButton("همه", new ImageIcon(imgLocation, altText));
+                    break;
+                case "Processing":
+                    button = new JButton("در حال پردازش", new ImageIcon(imgLocation, altText));
+                    break;
+                case "Completed":
+                    button = new JButton("کامل شده", new ImageIcon(imgLocation, altText));
+                    break;
+                case "Queue":
+                    button = new JButton("صف", new ImageIcon(imgLocation, altText));
+                    break;
+            }
+        }
+
+        Objects.requireNonNull(button).setBackground(Color.BLACK);
         button.setForeground(Color.WHITE);
 
         switch (imageName) {

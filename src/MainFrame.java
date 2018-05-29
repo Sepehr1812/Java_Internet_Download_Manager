@@ -26,7 +26,12 @@ public class MainFrame extends JFrame {
     }
 
     public static JPanel setDefaultPanel() {
-        JLabel initialLabel = new JLabel("There is no download here yet!", SwingConstants.CENTER);
+        String labelText;
+        if (Main.isEnglish)
+            labelText = "There is no download here yet!";
+        else labelText = "هنوز هیچ دانلودی اینجا نیست!";
+
+        JLabel initialLabel = new JLabel(labelText, SwingConstants.CENTER);
         initialLabel.setBackground(Color.BLACK);
         initialLabel.setForeground(Color.LIGHT_GRAY);
         JPanel initialPanel = new JPanel(new BorderLayout());

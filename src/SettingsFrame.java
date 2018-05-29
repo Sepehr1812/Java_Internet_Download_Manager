@@ -11,25 +11,36 @@ public class SettingsFrame {
     private static ArrayList<String> bannedAddressesArray = new ArrayList<>();
 
     public static void createSettings(JFrame frame) {
-        JFrame settingsFrame = new JFrame("Settings");
+        String[] nameOfThings;
+        String[] englishNames = {"ُSettings", "Number of downloading files at the same time (0 for unlimited):", "Choose the directory you want save your files:",
+                "Select Folder...", "Choose Folder...", "Banned Addresses (Enter a new line after each link): ", "Set one of these look-and-feels for Wavy Downloader:",
+                "Default", "Metal", "Motif", "OK"};
+        String[] persianNames = {"تنظیمات", ": تعداد فایل هایی که در یک زمان دانلود شوند (0 برای تعداد نامحدود)",
+                ": مکانی که میخواهید فایل هایتان در آنجا ذخیره شوند را انتخاب کنید", "پوشه را انتخاب کنید...", "پوشه را انتخاب کنید...",
+                ": آدرس های قدغن شده (یک خط جدید بعد از هر لینک وارد کنید)", ": یکی از این رویه ها را برای Wavy Downloader انتخاب کنید", "پیشفرض", "Metal", "Motif", "قبول"};
+        if (Main.isEnglish)
+            nameOfThings = englishNames;
+        else nameOfThings = persianNames;
+
+        JFrame settingsFrame = new JFrame(nameOfThings[0]);
         settingsFrame.setIconImage(new ImageIcon("../Images/Setting.png").getImage());
         JPanel panel  = new JPanel(new GridBagLayout());
 
         settingsFrame.setBounds(frame.getX() + 20, frame.getY() + 20, 50, 50);
 
 
-        JLabel limitLabel = new JLabel("Number of downloading files at the same time (0 for unlimited):", SwingConstants.LEFT);
+        JLabel limitLabel = new JLabel(nameOfThings[1], SwingConstants.LEFT);
 
         SpinnerNumberModel spinnerNumberModel = new SpinnerNumberModel(limitNumber, 0, Integer.SIZE, 1);
         JSpinner limitSpinner = new JSpinner(spinnerNumberModel);
 
-        JLabel fileLocationLabel = new JLabel("Choose the directory you want save your files:", SwingConstants.LEFT);
+        JLabel fileLocationLabel = new JLabel(nameOfThings[2], SwingConstants.LEFT);
 
-        JButton fileChooserButton  = new JButton("Select Folder...");
+        JButton fileChooserButton  = new JButton(nameOfThings[3]);
         fileChooserButton .addActionListener(ae -> {
             JFileChooser chooser = new JFileChooser(directory);
             chooser.setCurrentDirectory(new java.io.File("."));
-            chooser.setDialogTitle("Choose Folder...");
+            chooser.setDialogTitle(nameOfThings[4]);
             chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
             chooser.setAcceptAllFileFilterUsed(false);
 
@@ -38,7 +49,7 @@ public class SettingsFrame {
             else System.out.println("No Selection.");
         });
 
-        JLabel bannedAddressesLabel = new JLabel("Banned Addresses (Enter a new line after each link): ", SwingConstants.LEFT);
+        JLabel bannedAddressesLabel = new JLabel(nameOfThings[5], SwingConstants.LEFT);
 
         JTextArea bannedAddresses = new JTextArea(10, 30);
 
@@ -52,32 +63,42 @@ public class SettingsFrame {
         bannedAddresses.setForeground(Color.DARK_GRAY);
         JScrollPane scrollPaneForTextArea = new JScrollPane(bannedAddresses);
 
-        JLabel setLAFLabel = new JLabel("Set one of these look-and-feels for Wavy Downloader:", SwingConstants.LEFT);
+        JLabel setLAFLabel = new JLabel(nameOfThings[6], SwingConstants.LEFT);
 
         Container radioGroupContainer = new Container();
         radioGroupContainer.setLayout(new GridLayout(0, 1));
         ButtonGroup radioButtonGroup = new ButtonGroup();
 
         JRadioButton[] option =  new JRadioButton[3];
-        option[0] = new JRadioButton("Default", selectionOfRadioButtons[0]);
+        option[0] = new JRadioButton(nameOfThings[7], selectionOfRadioButtons[0]);
         radioButtonGroup.add(option[0]);
         radioGroupContainer.add(option[0]);
 
-        option[1] = new JRadioButton("Metal", selectionOfRadioButtons[1]);
+        option[1] = new JRadioButton(nameOfThings[8], selectionOfRadioButtons[1]);
         radioButtonGroup.add(option[1]);
         radioGroupContainer.add(option[1]);
 
-        option[2] = new JRadioButton("Motif", selectionOfRadioButtons[2]);
+        option[2] = new JRadioButton(nameOfThings[9], selectionOfRadioButtons[2]);
         radioButtonGroup.add(option[2]);
         radioGroupContainer.add(option[2]);
 
-        JButton okButton = new JButton("OK");
+        JButton okButton = new JButton(nameOfThings[10]);
         okButton.addActionListener(e -> {
             limitNumber = (int) limitSpinner.getValue();
 
             for (int i = 0; i < 3; i ++) {
                 if (option[i].isSelected()) {
-                    setLookAndFeel(option[i].getText(), frame);
+                    switch (i) {
+                        case 0:
+                            setLookAndFeel("Default", frame);
+                            break;
+                        case 1:
+                            setLookAndFeel("Metal", frame);
+                            break;
+                        case 2:
+                            setLookAndFeel("Motif", frame);
+                            break;
+                    }
                     selectionOfRadioButtons[i] = true;
                 } else selectionOfRadioButtons[i] = false;
             }

@@ -2,11 +2,18 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.Comparator;
 
 public class SearchAndSort {
 
+    public static boolean sortByTime = true, sortByName = false, sortBySize = false, ascendant = true;
+
     public static void searchFrame(JFrame frame) {
-        JFrame searchFrame = new JFrame("Search");
+        JFrame searchFrame;
+        if (Main.isEnglish)
+            searchFrame = new JFrame("Search");
+        else searchFrame = new JFrame("جستجو");
+
         searchFrame.setIconImage(new ImageIcon("../Images/Search.png").getImage());
         searchFrame.setSize(400, 70);
         searchFrame.setLocationRelativeTo(frame);
@@ -45,7 +52,14 @@ public class SearchAndSort {
     }
 
     private static void showSearchResults(String searched, JFrame frame) {
-        JFrame resultsFrame = new JFrame("Search Results for \"" + searched + "\"");
+        String[] nameOfThings;
+        String[] englishNames = {"Search Results for", "No download found!", "Not Found"};
+        String[] persianNames = {"نتیجه های جستجو برای", "دانلودی پیدا نشد!", "پیدا نشد"};
+        if (Main.isEnglish)
+            nameOfThings = englishNames;
+        else nameOfThings = persianNames;
+
+        JFrame resultsFrame = new JFrame(nameOfThings[0] + " \"" + searched + "\"");
         resultsFrame.setIconImage(new ImageIcon("../Images/Search Results.png").getImage());
         resultsFrame.setLocationRelativeTo(frame);
         resultsFrame.setSize(600, 300);
@@ -74,6 +88,30 @@ public class SearchAndSort {
 
             resultsFrame.setVisible(true);
         } else
-            JOptionPane.showMessageDialog(frame, "No download Found!", "Not Found", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(frame, nameOfThings[1], nameOfThings[2], JOptionPane.ERROR_MESSAGE);
+    }
+}
+
+class SortByName implements Comparator<MyFile> {
+    public int compare(MyFile a, MyFile b) {
+        if (SearchAndSort.ascendant)
+            return a.getName().compareTo(b.getName());
+        else return -(a.getName().compareTo(b.getName()));
+    }
+}
+
+class SortBySize implements Comparator<MyFile> {
+    public int compare(MyFile a, MyFile b) {
+        if (SearchAndSort.ascendant)
+            return (int) (a.getSize() - b.getSize());
+        else return (int) (-(a.getSize() - b.getSize()));
+    }
+}
+
+class SortByTime implements Comparator<MyFile> {
+    public int compare(MyFile a, MyFile b) {
+        if (SearchAndSort.ascendant)
+            return a.getTime().compareTo(b.getTime());
+        else return -(a.getTime().compareTo(b.getTime()));
     }
 }

@@ -9,8 +9,11 @@ public class Main {
 
     private static JMenuBar basicMenuBar;
     private static JPanel basicToolbarPanel, basicMainMenuPanel;
+    public static Boolean isEnglish;
 
     public static void main(String[] args) {
+        FileManager.readLanguageFile();
+
         MainFrame mainFrame = new MainFrame();
 
         Toolbar toolbar = new Toolbar();

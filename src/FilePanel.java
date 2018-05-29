@@ -39,6 +39,20 @@ public class FilePanel{
         } else
             mainPanel.setLayout(new GridLayout(downloadPanels.size(), 0, 1, 1));
 
+
+        if (SearchAndSort.sortByTime)
+            downloadFiles.sort(new SortByTime());
+        else if (SearchAndSort.sortByName)
+            downloadFiles.sort(new SortByName());
+        else if (SearchAndSort.sortBySize)
+            downloadFiles.sort(new SortBySize());
+
+        downloadPanels.clear();
+        for (MyFile downloadFile : FilePanel.downloadFiles) {
+            FilePanel.downloadPanels.add(downloadFile.convertToJPanel());
+            downloadFile.getTimer().stop();
+        }
+
         for (JPanel downloadPanel : downloadPanels)
             mainPanel.add(downloadPanel);
 

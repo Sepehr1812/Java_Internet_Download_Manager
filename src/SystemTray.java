@@ -16,15 +16,20 @@ public class SystemTray {
 
     private static PopupMenu createPopupMenu(JFrame frame, TrayIcon icon) {
         PopupMenu menu = new PopupMenu();
-
-        MenuItem open = new MenuItem("Open Wavy Downloader...");
+        MenuItem open;
+        if (Main.isEnglish)
+            open = new MenuItem("Open Wavy Downloader...");
+        else open = new MenuItem("Wavy Downloader را باز کن...");
         open.addActionListener(e -> {
             java.awt.SystemTray.getSystemTray().remove(icon);
             frame.setVisible(true);
         });
         menu.add(open);
 
-        MenuItem exit = new MenuItem("Exit");
+        MenuItem exit;
+        if (Main.isEnglish)
+            exit = new MenuItem("Exit");
+        else exit = new MenuItem("خروج");
         exit.addActionListener(e -> System.exit(0));
         menu.add(exit);
 

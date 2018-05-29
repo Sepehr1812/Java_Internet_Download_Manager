@@ -41,7 +41,7 @@ public class MyFile implements Serializable {
         return directory;
     }
 
-    private double getSize() {
+    public double getSize() {
         return size;
     }
 
@@ -49,7 +49,7 @@ public class MyFile implements Serializable {
         return speed;
     }
 
-    private String getTime() {
+    public String getTime() {
         return time;
     }
 
@@ -196,8 +196,11 @@ public class MyFile implements Serializable {
     }
 
     private String myToString() {
+        if (Main.isEnglish)
         return "Name: " + getName() + "\n\nSize: " + getSize() + " " + getScale() + "\n\nPercent of Download: " + getPercent() + "\n\nSpeed: "
                 + getSpeed() + "\n\nLink: " + getLink() + "\n\nDirectory: " + getDirectory() + "\n\nTime of Start: " + getTime();
+        else return  "نام: " + getName() + "\n\nاندازه: " + getSize() + " " + getScale() + "\n\nدرصد دانلود: " + getPercent() + "\n\nسرعت: "
+                + getSpeed() + "\n\nلینک: " + getLink() + "\n\nمکان: " + getDirectory() + "\n\nزمان شروع: " + getTime();
     }
 
     private void fillProgressBar() {
@@ -224,7 +227,10 @@ public class MyFile implements Serializable {
         progressBar.addChangeListener(e -> {
             if(progressBar.getValue() == 100) {
                 timer.stop();
-                JOptionPane.showMessageDialog(null, "Download Completed!");
+                if (Main.isEnglish)
+                    JOptionPane.showMessageDialog(null, "Download Completed!");
+                else
+                    JOptionPane.showMessageDialog(null, "دانلود کامل شد!");
                 isProcessing = false;
                 isCompleted = true;
                 isInQueue = false;

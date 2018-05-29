@@ -96,4 +96,30 @@ public class FileManager {
             e.printStackTrace();
         }
     }
+
+    public static void writeLanguageFile(boolean isEnglish) {
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("../Data/LanguageFile.wavy"))) {
+            oos.writeObject(isEnglish);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            System.err.println("File didn't find.");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void readLanguageFile() {
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("../Data/LanguageFile.wavy"))) {
+            try {
+                Main.isEnglish = (boolean) ois.readObject();
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+        } catch (FileNotFoundException e) {
+            Main.isEnglish = true;
+            System.err.println("File didn't find.");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
