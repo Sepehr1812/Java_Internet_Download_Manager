@@ -4,12 +4,24 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.Comparator;
 
+/**
+ * A class contains search methods and sort fields.
+ *
+ * @author Sepehr Akhoundi
+ */
 public class SearchAndSort {
 
+    //Some fields specifies kind of searching.
     public static boolean sortByTime = true, sortByName = false, sortBySize = false, ascendant = true;
 
+    /**
+     * Creates a frame contains search field.
+     * @param frame Main frame.
+     */
     public static void searchFrame(JFrame frame) {
         JFrame searchFrame;
+
+        //Setting Persian or English words.
         if (Main.isEnglish)
             searchFrame = new JFrame("Search");
         else searchFrame = new JFrame("جستجو");
@@ -39,6 +51,10 @@ public class SearchAndSort {
 
             }
 
+            /**
+             * To search when user released ENTER key.
+             * @param e Releasing any key.
+             */
             @Override
             public void keyReleased(KeyEvent e) {
                 if (e.getKeyChar() == KeyEvent.VK_ENTER)
@@ -51,6 +67,11 @@ public class SearchAndSort {
         searchFrame.setVisible(true);
     }
 
+    /**
+     * Creates a frame contains search results.
+     * @param searched the expression user searches.
+     * @param frame search frame.
+     */
     private static void showSearchResults(String searched, JFrame frame) {
         String[] nameOfThings;
         String[] englishNames = {"Search Results for", "No download found!", "Not Found"};
@@ -92,6 +113,10 @@ public class SearchAndSort {
     }
 }
 
+/**
+ * A class to sorting files by their names.
+ * It's for sort method in List class.
+ */
 class SortByName implements Comparator<MyFile> {
     public int compare(MyFile a, MyFile b) {
         if (SearchAndSort.ascendant)
@@ -100,6 +125,10 @@ class SortByName implements Comparator<MyFile> {
     }
 }
 
+/**
+ * A class to sorting files by their sizes.
+ * It's for sort method in List class.
+ */
 class SortBySize implements Comparator<MyFile> {
     public int compare(MyFile a, MyFile b) {
         if (SearchAndSort.ascendant)
@@ -108,6 +137,10 @@ class SortBySize implements Comparator<MyFile> {
     }
 }
 
+/**
+ * A class to sorting files by their times of starting download.
+ * It's for sort method in List class.
+ */
 class SortByTime implements Comparator<MyFile> {
     public int compare(MyFile a, MyFile b) {
         if (SearchAndSort.ascendant)

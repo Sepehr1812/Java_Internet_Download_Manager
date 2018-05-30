@@ -222,39 +222,66 @@ public class SettingsFrame {
     }
 }
 
+/**
+ * A class that settings data saves in that to save in a file.
+ */
 class SettingsFile implements Serializable {
     private String directory, lookAndFeel;
     private int limitNumber;
     private boolean[] selectionOfLookAndFeel;
 
+    /**
+     * @return Directory of file.
+     */
     public String getDirectory() {
         return directory;
     }
 
+    /**
+     * @param directory Directory of file.
+     */
     public void setDirectory(String directory) {
         this.directory = directory;
     }
 
+    /**
+     * @return Look and feel of file.
+     */
     public String getLookAndFeel() {
         return lookAndFeel;
     }
 
+    /**
+     * @param lookAndFeel Look and feel of file.
+     */
     public void setLookAndFeel(String lookAndFeel) {
         this.lookAndFeel = lookAndFeel;
     }
 
+    /**
+     * @return Limit number of downloads.
+     */
     public int getLimitNumber() {
         return limitNumber;
     }
 
+    /**
+     * @param limitNumber Limit number of downloads.
+     */
     public void setLimitNumber(int limitNumber) {
         this.limitNumber = limitNumber;
     }
 
+    /**
+     * @return the array of look and file radio buttons.
+     */
     public boolean[] getSelectionOfLookAndFeel() {
         return selectionOfLookAndFeel;
     }
 
+    /**
+     * @param selectionOfLookAndFeel the array of look and file radio buttons.
+     */
     public void setSelectionOfLookAndFeel(boolean[] selectionOfLookAndFeel) {
         this.selectionOfLookAndFeel = selectionOfLookAndFeel;
     }

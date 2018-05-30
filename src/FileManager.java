@@ -2,8 +2,17 @@ import javax.swing.*;
 import java.io.*;
 import java.util.ArrayList;
 
+/**
+ * A class to manage files we need them.
+ *
+ * @author Sepehr Akhoundi
+ */
 public class FileManager {
 
+    /**
+     * A method to write whole files and files of queue of program to data folder.
+     * @param files files we need to write.
+     */
     public static void writeFiles(ArrayList<MyFile> files) {
         try (ObjectOutputStream oosAll = new ObjectOutputStream(new FileOutputStream("../Data/FilesInfo.wavy", false));
              ObjectOutputStream oosQueue = new ObjectOutputStream(new FileOutputStream("../Data/QueueFilesInfo.wavy", false))) {
@@ -21,6 +30,9 @@ public class FileManager {
         }
     }
 
+    /**
+     * A method to reed whole files of program from data folder.
+     */
     public static void readFiles() {
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("../Data/FilesInfo.wavy"))) {
             FilePanel.downloadFiles = (ArrayList<MyFile>) ois.readObject();
@@ -36,6 +48,10 @@ public class FileManager {
         }
     }
 
+    /**
+     * To write removed files for backup.
+     * @param file files we need to write.
+     */
     public static void addToRemovedList(MyFile file) {
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("../Data/Removed.wavy", true))) {
             oos.writeObject("Name: " + file.getName() + " , Link: " + file.getLink());
@@ -47,6 +63,9 @@ public class FileManager {
         }
     }
 
+    /**
+     * To write settings data.
+     */
     public static void writeSettingsFile() {
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("../Data/SettingsFile.wavy", false))) {
             oos.writeObject(SettingsFrame.createSettingsFile());
@@ -58,6 +77,11 @@ public class FileManager {
         }
     }
 
+    /**
+     * To read and apply settings file.
+     * @param frame Main frame.
+     * @throws IOException when there is no file to read; for setting look and feel by default.
+     */
     public static void readSettingsFile(JFrame frame) throws IOException {
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("../Data/SettingsFile.wavy"))) {
             SettingsFile settingsFile = (SettingsFile) ois.readObject();
@@ -71,6 +95,9 @@ public class FileManager {
         }
     }
 
+    /**
+     * To write data of banned links.
+     */
     public static void writeBannedLinksFile() {
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("../Data/BannedLinks.wavy"))) {
             oos.writeObject(SettingsFrame.getBannedAddressesArray());
@@ -82,6 +109,9 @@ public class FileManager {
         }
     }
 
+    /**
+     * To read data of banned links.
+     */
     public static void readBannedLinksFile() {
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("../Data/BannedLinks.wavy"))) {
             try {
@@ -97,6 +127,10 @@ public class FileManager {
         }
     }
 
+    /**
+     * To write language selection from it's file.
+     * @param isEnglish if {@code true} program must run in English.
+     */
     public static void writeLanguageFile(boolean isEnglish) {
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("../Data/LanguageFile.wavy"))) {
             oos.writeObject(isEnglish);
@@ -108,6 +142,9 @@ public class FileManager {
         }
     }
 
+    /**
+     * To read language selection from it's file.
+     */
     public static void readLanguageFile() {
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("../Data/LanguageFile.wavy"))) {
             try {
