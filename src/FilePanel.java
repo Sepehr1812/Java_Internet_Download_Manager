@@ -15,7 +15,7 @@ public class FilePanel{
         contain.removeAll();
 
         downloadFiles.add(file);
-        downloadPanels.add(file.convertToJPanel());
+        downloadPanels.add(file.convertToJPanel(frame));
         file.setProcessing(true);
 
         mainPanel.setLayout(new GridLayout(downloadPanels.size(), 0, 1, 1));
@@ -49,8 +49,8 @@ public class FilePanel{
 
         downloadPanels.clear();
         for (MyFile downloadFile : FilePanel.downloadFiles) {
-            FilePanel.downloadPanels.add(downloadFile.convertToJPanel());
-            downloadFile.getTimer().stop();
+            FilePanel.downloadPanels.add(downloadFile.convertToJPanel(frame));
+//            downloadFile.getTimer().stop();
         }
 
         for (JPanel downloadPanel : downloadPanels)

@@ -49,8 +49,7 @@ public class NewDownload {
         JButton startButton = new JButton(nameOfThings[6]);
         startButton.addActionListener(e -> {
             if (! isLinkBanned(link.getText())) {
-                file[0] = new MyFile(SettingsFrame.getDirectory(), 500.00, "MB", 850.0,
-                        new SimpleDateFormat("yyyy/MM/dd , HH:mm:ss").format(Calendar.getInstance().getTime()), 0);
+                file[0] = new MyFile(SettingsFrame.getDirectory(), new SimpleDateFormat("yyyy/MM/dd , HH:mm:ss").format(Calendar.getInstance().getTime()), 0);
 
                 file[0].setLink(link.getText());
                 file[0].setName(name.getText());
@@ -62,6 +61,31 @@ public class NewDownload {
                 initialDelay = (int) scheduleSpinner.getValue();
 
                 FilePanel.addToMainPanel(frame, file[0]);
+
+                //Downloading...
+//                ExecutorService pool;
+//
+//                if (! file[0].isInQueue())
+//                    pool = Executors.newFixedThreadPool(DownloadThread.getLimitOfDownloads());
+//                else pool = Executors.newSingleThreadExecutor();
+//
+//                pool.execute(new DownloadThread(file[0]));
+                file[0].getProgressBar().setValue(0);
+
+                DownloadThread downloadThread = new DownloadThread(file[0]);
+                file[0].setDownloadThread(downloadThread);
+
+                downloadThread.addPropertyChangeListener(evt -> {
+                    if (evt.getPropertyName().equals("progress")) {
+                        int newValue = (Integer) evt.getNewValue();
+                        file[0].getProgressBar().setValue(newValue);
+                        file[0].setPercent(newValue);
+                        file[0].getProgressBar().setString(file[0].getPercent() / 100.0 * file[0].getSize() + " " + " / " + file[0].getSize() +
+                                " Bytes  (" + file[0].getPercent() + "%)");
+                    }
+                });
+
+                downloadThread.execute();
 
                 newFrame.setVisible(false);
             } else {

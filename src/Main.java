@@ -44,7 +44,7 @@ public class Main {
         basicMainMenuPanel = mainMenu.createMainMenu(mainFrame.getMainFrame());
         mainFrame.getMainFrame().add(basicMainMenuPanel, BorderLayout.WEST);
 
-        FileManager.readFiles();
+        FileManager.readFiles(mainFrame.getMainFrame());
         FilePanel.updateMainPanel(mainFrame.getMainFrame());
 
 

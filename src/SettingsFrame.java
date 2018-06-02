@@ -85,6 +85,7 @@ public class SettingsFrame {
         JButton okButton = new JButton(nameOfThings[10]);
         okButton.addActionListener(e -> {
             limitNumber = (int) limitSpinner.getValue();
+            DownloadThread.setLimitOfDownloads((int) limitSpinner.getValue());
 
             for (int i = 0; i < 3; i ++) {
                 if (option[i].isSelected()) {

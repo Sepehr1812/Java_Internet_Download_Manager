@@ -1,29 +1,29 @@
 import javax.swing.*;
+import java.io.IOException;
 import java.util.Collections;
-
 public class SelectActions {
 
     public static void pause() {
         for (MyFile downloadFile : FilePanel.downloadFiles) {
             if (downloadFile.isSelected())
-                downloadFile.getTimer().stop();
+                pausing(downloadFile);
         }
     }
 
     public static void resume() {
         for (MyFile downloadFile : FilePanel.downloadFiles) {
             if (downloadFile.isSelected() && downloadFile.isNotCanceled())
-                downloadFile.getTimer().start();
+                resuming(downloadFile);
         }
     }
 
     public static void pauseOrResume() {
         for (MyFile downloadFile : FilePanel.downloadFiles) {
             if (downloadFile.isSelected()) {
-                if (downloadFile.getTimer().isRunning())
-                    downloadFile.getTimer().stop();
+                if (downloadFile.isNotPaused())
+                    pausing(downloadFile);
                 else if (downloadFile.isNotCanceled())
-                    downloadFile.getTimer().start();
+                    resuming(downloadFile);
             }
         }
     }
@@ -31,7 +31,8 @@ public class SelectActions {
     public static void remove(JFrame frame) {
         for (int i = 0; i < FilePanel.downloadFiles.size(); i ++) {
             if (FilePanel.downloadFiles.get(i).isSelected()) {
-                FilePanel.downloadFiles.get(i).getTimer().stop();
+                if (FilePanel.downloadFiles.get(i).isNotPaused())
+                    pausing(FilePanel.downloadFiles.get(i));
                 FileManager.addToRemovedList(FilePanel.downloadFiles.get(i));
                 FilePanel.downloadFiles.remove(i);
                 FilePanel.downloadPanels.remove(i);
@@ -44,7 +45,10 @@ public class SelectActions {
     public static void cancel() {
         for (MyFile downloadFile : FilePanel.downloadFiles) {
             if (downloadFile.isSelected()) {
-                downloadFile.getTimer().stop();
+                if (downloadFile.isNotPaused()) {
+                    pausing(downloadFile);
+                    downloadFile.setPaused(true);
+                }
                 downloadFile.setCanceled(true);
                 downloadFile.setCompleted(false);
                 downloadFile.setProcessing(false);
@@ -92,5 +96,35 @@ public class SelectActions {
             Collections.swap(FilePanel.downloadFiles, fileNumberOne, fileNumberTwo);
             Collections.swap(FilePanel.downloadPanels, fileNumberOne, fileNumberTwo);
         }
+    }
+
+    private static void resuming(MyFile file) {
+        DownloadThread downloadThread = new DownloadThread(file);
+        file.setDownloadThread(downloadThread);
+
+        downloadThread.addPropertyChangeListener(evt -> {
+            if (evt.getPropertyName().equals("progress")) {
+                int newValue = (Integer) evt.getNewValue();
+                file.getProgressBar().setValue(newValue);
+                file.setPercent(newValue);
+                file.getProgressBar().setString(file.getPercent() / 100.0 * file.getSize() + " "+ " / " + file.getSize() +
+                        " Bytes  (" + file.getPercent() + "%)");
+            }
+        });
+
+        file.setPaused(false);
+
+        downloadThread.execute();
+    }
+
+    private static void pausing(MyFile file) {
+        file.getDownloadThread().cancel(true);
+        try {
+            file.getDownloadThread().getDownloader().disconnect();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        file.setPaused(true);
     }
 }

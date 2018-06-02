@@ -33,16 +33,15 @@ public class FileManager {
     /**
      * A method to reed whole files of program from data folder.
      */
-    public static void readFiles() {
+    public static void readFiles(JFrame frame) {
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("../Data/FilesInfo.wavy"))) {
             FilePanel.downloadFiles = (ArrayList<MyFile>) ois.readObject();
             for (MyFile downloadFile : FilePanel.downloadFiles) {
-                FilePanel.downloadPanels.add(downloadFile.convertToJPanel());
-                downloadFile.getTimer().stop();
+                FilePanel.downloadPanels.add(downloadFile.convertToJPanel(frame));
+//                downloadFile.getTimer().stop();
             }
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            System.err.println("File didn't find.");
+            System.err.println("File of whole files didn't find.");
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
@@ -120,8 +119,7 @@ public class FileManager {
                 e.printStackTrace();
             }
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            System.err.println("File didn't find.");
+            System.err.println("File of banned links didn't find.");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -154,7 +152,7 @@ public class FileManager {
             }
         } catch (FileNotFoundException e) {
             Main.isEnglish = true;
-            System.err.println("File didn't find.");
+            System.err.println("File of languages didn't find.");
         } catch (IOException e) {
             e.printStackTrace();
         }

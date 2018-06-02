@@ -84,12 +84,13 @@ public class MenuBar {
                     menuItem.setAccelerator(KeyStroke.getKeyStroke("ctrl alt E"));
 
                     menuItem.addActionListener(e -> {
-                        File[] files = new File[5];
+                        File[] files = new File[6];
                         files[0] = new File("../Data/FilesInfo.wavy");
                         files[1] = new File("../Data/BannedLinks.wavy");
                         files[2] = new File("../Data/QueueFilesInfo.wavy");
                         files[3] = new File("../Data/Removed.wavy");
                         files[4] = new File("../Data/SettingsFile.wavy");
+                        files[5] = new File("../Data/LanguageFile.wavy");
 
                         try (FileOutputStream fos = new FileOutputStream(new File("../WavyDataFiles.zip"));
                              ZipOutputStream zos = new ZipOutputStream(fos)) {
@@ -213,6 +214,9 @@ public class MenuBar {
         english.setAccelerator(KeyStroke.getKeyStroke("alt shift ctrl E"));
         english.addActionListener(e -> {
             FileManager.writeLanguageFile(true);
+            FileManager.writeFiles(FilePanel.downloadFiles);
+            FileManager.writeSettingsFile();
+            FileManager.writeBannedLinksFile();
             JOptionPane.showMessageDialog(frame, nameOfThings[11], nameOfThings[12], JOptionPane.INFORMATION_MESSAGE);
             System.exit(0);
         });
@@ -224,6 +228,9 @@ public class MenuBar {
         persian.setMnemonic(KeyEvent.VK_P);
         persian.addActionListener(e -> {
             FileManager.writeLanguageFile(false);
+            FileManager.writeFiles(FilePanel.downloadFiles);
+            FileManager.writeSettingsFile();
+            FileManager.writeBannedLinksFile();
             JOptionPane.showMessageDialog(frame, nameOfThings[11], nameOfThings[12], JOptionPane.INFORMATION_MESSAGE);
             System.exit(0);
         });

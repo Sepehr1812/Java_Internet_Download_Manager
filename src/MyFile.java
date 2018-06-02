@@ -11,20 +11,21 @@ public class MyFile implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private String name, link, directory, scale, time;
-    private double size, speed;
+    private String name, link, directory, time;
+    private double speed = 0;
+    private int size = 0;
     private int percent;
     private JProgressBar progressBar = new JProgressBar(0, 100);
+    private JLabel speedLabel;
     private boolean isSelected = false, isCanceled = false;
     private Timer timer;
     private JPanel panel;
-    private boolean isProcessing = false, isCompleted = false, isInQueue = false;
+    private boolean isProcessing = false, isCompleted = false, isInQueue = false, isPaused = false;
+    private long totalBytesRead = 0;
+    private DownloadThread downloadThread;
 
-    MyFile(String directory, double size, String scale, double speed, String time, int percent) {
+    MyFile(String directory, String time, int percent) {
         this.directory = directory;
-        this.size = size;
-        this.scale = scale;
-        this.speed = speed;
         this.time = time;
         this.percent = percent;
     }
@@ -37,24 +38,20 @@ public class MyFile implements Serializable {
         return link;
     }
 
-    private String getDirectory() {
+    public String getDirectory() {
         return directory;
     }
 
-    public double getSize() {
+    public int getSize() {
         return size;
     }
 
-    private double getSpeed() {
+    public double getSpeed() {
         return speed;
     }
 
     public String getTime() {
         return time;
-    }
-
-    private String getScale() {
-        return scale;
     }
 
     public void setName(String name) {
@@ -65,11 +62,11 @@ public class MyFile implements Serializable {
         this.link = link;
     }
 
-    private int getPercent() {
+    public int getPercent() {
         return percent;
     }
 
-    private void setPercent(int percent) {
+    public void setPercent(int percent) {
         this.percent = percent;
     }
 
@@ -117,39 +114,83 @@ public class MyFile implements Serializable {
         isInQueue = inQueue;
     }
 
-    public JPanel convertToJPanel() {
+    public JProgressBar getProgressBar() {
+        return progressBar;
+    }
+
+    public void setSpeed(double speed) {
+        this.speed = speed;
+    }
+
+    public void setSize(int size) {
+        this.size = size;
+    }
+
+    public JLabel getSpeedLabel() {
+        return speedLabel;
+    }
+
+    public long getTotalBytesRead() {
+        return totalBytesRead;
+    }
+
+    public void setTotalBytesRead(long totalBytesRead) {
+        this.totalBytesRead = totalBytesRead;
+    }
+
+    public DownloadThread getDownloadThread() {
+        return downloadThread;
+    }
+
+    public void setDownloadThread(DownloadThread downloadThread) {
+        this.downloadThread = downloadThread;
+    }
+
+    public boolean isNotPaused() {
+        return !isPaused;
+    }
+
+    public void setPaused(boolean paused) {
+        isPaused = paused;
+    }
+
+    public JPanel convertToJPanel(JFrame frame) {
         panel = new JPanel(new GridLayout(3, 1, 1, 1));
         panel.setBackground(Color.DARK_GRAY);
         panel.setForeground(Color.LIGHT_GRAY);
 
-        JLabel speed = new JLabel(getSpeed() + " KB/s");
         JLabel name = new JLabel(getName());
         name.setHorizontalAlignment(SwingConstants.LEFT);
         name.setBackground(Color.DARK_GRAY);
         name.setForeground(Color.LIGHT_GRAY);
 
         name.addMouseListener(new MouseAdapter() {
-            /**
-             * {@inheritDoc}
-             *
-             * @param e
-             */
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (e.getClickCount() == 2 && isCompleted) {
-                    try {
-                        Desktop desktop = null;
-                        if (Desktop.isDesktopSupported())
-                            desktop = Desktop.getDesktop();
+                if (e.getClickCount() == 2) {
+                    if (! isCompleted) {
+                        if (Main.isEnglish)
+                            JOptionPane.showMessageDialog(frame, "Download is not completed yet!", "Download Not Completed", JOptionPane.ERROR_MESSAGE);
+                        else JOptionPane.showMessageDialog(frame, "دانلود هنوز کامل نشده!", "دانلود کامل نشده", JOptionPane.ERROR_MESSAGE);
+                    } else {
+                        try {
+                            Desktop desktop = null;
+                            if (Desktop.isDesktopSupported())
+                                desktop = Desktop.getDesktop();
 
-                        Objects.requireNonNull(desktop).open(new File(getDirectory() + "/" + getName()));
-                    } catch (IOException ioe) {
-                        ioe.printStackTrace();
+                            Objects.requireNonNull(desktop).open(new File(getDirectory() + "/" + getName()));
+                        } catch (IllegalArgumentException iae) {
+                            if (Main.isEnglish)
+                                JOptionPane.showMessageDialog(frame, "There is not this file in its directory.", "File Not Found", JOptionPane.ERROR_MESSAGE);
+                            else JOptionPane.showMessageDialog(frame, "این فایل در مکانش نیست.", "فایل پیدا نشد", JOptionPane.ERROR_MESSAGE);
+                        } catch (IOException ioe) {
+                            ioe.printStackTrace();
+                        }
                     }
                 } else if (SwingUtilities.isRightMouseButton(e))
                     JOptionPane.showMessageDialog(panel, myToString(), "Download Info", JOptionPane.PLAIN_MESSAGE, new ImageIcon("../GIFs/Info.gif"));
                 else if (SwingUtilities.isLeftMouseButton(e))
-                    selecting(panel, name, speed);
+                    selecting(panel, name, speedLabel);
             }
         });
 
@@ -158,36 +199,29 @@ public class MyFile implements Serializable {
 
         progressBar.setStringPainted(true);
         progressBar.setValue(getPercent());
-        progressBar.setString(getPercent() / 100.0 * getSize() + " " + getScale() + " / " + getSize() + getScale() + "  (" + getPercent() + "%)");
+        progressBar.setString(getPercent() / 100 * getSize() + " " + " / " + getSize() + "  (" + getPercent() + "%)");
         UIManager.put("ProgressBar.background", Color.DARK_GRAY);
         progressBar.setBackground(Color.DARK_GRAY);
         progressBar.setForeground(Color.GRAY);
 
         panel.add(progressBar);
 
+        speedLabel = new JLabel(getSpeed() + " KB/s");
+        speedLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+        speedLabel.setBackground(Color.DARK_GRAY);
+        speedLabel.setForeground(Color.LIGHT_GRAY);
 
-        speed.setHorizontalAlignment(SwingConstants.RIGHT);
-        speed.setBackground(Color.DARK_GRAY);
-        speed.setForeground(Color.LIGHT_GRAY);
-
-        panel.add(speed);
+        panel.add(speedLabel);
 
         panel.addMouseListener(new MouseAdapter() {
-            /**
-             * {@inheritDoc}
-             *
-             * @param e
-             */
             @Override
             public void mouseReleased(MouseEvent e) {
                 if (SwingUtilities.isRightMouseButton(e))
                     JOptionPane.showMessageDialog(panel, myToString(), "Download Info", JOptionPane.PLAIN_MESSAGE, new ImageIcon("../GIFs/Info.gif"));
                 else if (SwingUtilities.isLeftMouseButton(e))
-                    selecting(panel, name, speed);
+                    selecting(panel, name, speedLabel);
             }
         });
-
-        fillProgressBar();
 
         if (isCanceled)
             canceling();
@@ -197,13 +231,13 @@ public class MyFile implements Serializable {
 
     private String myToString() {
         if (Main.isEnglish)
-        return "Name: " + getName() + "\n\nSize: " + getSize() + " " + getScale() + "\n\nPercent of Download: " + getPercent() + "\n\nSpeed: "
+        return "Name: " + getName() + "\n\nSize: " + getSize() + " " + "\n\nPercent of Download: " + getPercent() + "\n\nSpeed: "
                 + getSpeed() + "\n\nLink: " + getLink() + "\n\nDirectory: " + getDirectory() + "\n\nTime of Start: " + getTime();
-        else return  "نام: " + getName() + "\n\nاندازه: " + getSize() + " " + getScale() + "\n\nدرصد دانلود: " + getPercent() + "\n\nسرعت: "
+        else return  "نام: " + getName() + "\n\nاندازه: " + getSize() + " " + "\n\nدرصد دانلود: " + getPercent() + "\n\nسرعت: "
                 + getSpeed() + "\n\nلینک: " + getLink() + "\n\nمکان: " + getDirectory() + "\n\nزمان شروع: " + getTime();
     }
 
-    private void fillProgressBar() {
+    private void fillProgressBar(JFrame frame) {
         final int[] c = {getPercent()};
         final int waitingTime = 15 * 1000; //15 seconds
         final int delay = waitingTime / 100;
@@ -212,7 +246,7 @@ public class MyFile implements Serializable {
             if(c[0] <= 100) {
                 progressBar.setValue(++ c[0]);
                 setPercent(c[0]);
-                progressBar.setString(getPercent() / 100.0 * getSize() + " " + getScale() + " / " + getSize() + getScale() + "  (" + getPercent() + "%)");
+//                progressBar.setString(getPercent() / 100.0 * getSize() + " " + getScale() + " / " + getSize() + getScale() + "  (" + getPercent() + "%)");
             }
         });
 
@@ -228,9 +262,9 @@ public class MyFile implements Serializable {
             if(progressBar.getValue() == 100) {
                 timer.stop();
                 if (Main.isEnglish)
-                    JOptionPane.showMessageDialog(null, "Download Completed!");
+                    JOptionPane.showMessageDialog(frame, "Download Completed!");
                 else
-                    JOptionPane.showMessageDialog(null, "دانلود کامل شد!");
+                    JOptionPane.showMessageDialog(frame, "دانلود کامل شد!");
                 isProcessing = false;
                 isCompleted = true;
                 isInQueue = false;
