@@ -4,34 +4,48 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.Serializable;
 
+/**
+ * Thread of each download. Downloading and multithreading happens in this class.
+ *
+ * @author Sepehr Akhoundi
+ * @version 1.5
+ */
 public class DownloadThread extends SwingWorker<Void, Void> implements Runnable, Serializable {
 
     private MyFile file;
-    private static int limitOfDownloads;
     private HTTPDownloader downloader;
 
+    /**
+     * Constructor for DownloadThread class.
+     * @param file the file we want to download.
+     */
     DownloadThread(MyFile file) {
         super();
         this.file = file;
     }
 
-    public static int getLimitOfDownloads() {
-        if (limitOfDownloads != 0)
-            return limitOfDownloads;
-        else return 10000;
-    }
-
-    public static void setLimitOfDownloads(int limitOfDownloads) {
-        DownloadThread.limitOfDownloads = limitOfDownloads;
-    }
-
+    /**
+     * @return HTTP Connection we use.
+     */
     public HTTPDownloader getDownloader() {
         return downloader;
     }
 
+    /**
+     * Downloading in background to avoid program becoming gore.
+     * @return null.
+     * @throws Exception any exception may happen; like IOException.
+     */
     @Override
     protected Void doInBackground() throws Exception {
         downloader = new HTTPDownloader();
+
+        //for considering initial delay time for schedule downloading.
+        long currentTime = System.currentTimeMillis();
+        while (true) {
+            if ((System.currentTimeMillis() - currentTime) / 1000.0 / 60 >= NewDownload.initialDelay)
+                break;
+        }
 
         downloader.downloadFile(file);
 
@@ -48,21 +62,23 @@ public class DownloadThread extends SwingWorker<Void, Void> implements Runnable,
         int percentCompleted;
         int fileSize = file.getSize();
 
+        //Skipping bytes we downloaded before.
         inputStream.skip(file.getTotalBytesRead());
 
+        //Downloading...
         while ((bytesRead = inputStream.read(buffer)) != -1) {
-            long start = System.nanoTime();
+            long start = System.nanoTime(); //for calculating the speed of download.
 
             outputStream.write(buffer, 0, bytesRead);
             totalBytesRead += bytesRead;
             percentCompleted = (int) (totalBytesRead * 100 / fileSize);
-            file.setTotalBytesRead(totalBytesRead);
+            file.setTotalBytesRead(totalBytesRead); //to know in resuming where we must start.
 
             setProgress(percentCompleted);
 
             long end = System.nanoTime();
 
-            file.setSpeed(Math.round((double) bytesRead / (end - start) * 1000)); //per KB/s.
+            file.setSpeed(Math.round((double) bytesRead / (end - start) * 1000)); //speed of download per KB/s.
             file.getSpeedLabel().setText(file.getSpeed() + " KB/sec");
         }
 
@@ -74,6 +90,9 @@ public class DownloadThread extends SwingWorker<Void, Void> implements Runnable,
         return null;
     }
 
+    /**
+     * The task must be done when download completed.
+     */
     @Override
     protected void done() {
         if (file.isCompleted()) {

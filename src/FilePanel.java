@@ -48,10 +48,8 @@ public class FilePanel{
             downloadFiles.sort(new SortBySize());
 
         downloadPanels.clear();
-        for (MyFile downloadFile : FilePanel.downloadFiles) {
+        for (MyFile downloadFile : FilePanel.downloadFiles)
             FilePanel.downloadPanels.add(downloadFile.convertToJPanel(frame));
-//            downloadFile.getTimer().stop();
-        }
 
         for (JPanel downloadPanel : downloadPanels)
             mainPanel.add(downloadPanel);

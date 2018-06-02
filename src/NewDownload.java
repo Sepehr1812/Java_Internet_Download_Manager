@@ -2,10 +2,14 @@ import javax.swing.*;
 import java.awt.*;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class NewDownload {
 
     public static int initialDelay;
+    public static ExecutorService pool = Executors.newFixedThreadPool(SettingsFrame.getLimitNumber());
+    public static ExecutorService queuePool = Executors.newFixedThreadPool(1);
 
     public static void startNewDownload(JFrame frame) {
         String[] nameOfThings;
@@ -63,18 +67,18 @@ public class NewDownload {
                 FilePanel.addToMainPanel(frame, file[0]);
 
                 //Downloading...
-//                ExecutorService pool;
-//
-//                if (! file[0].isInQueue())
-//                    pool = Executors.newFixedThreadPool(DownloadThread.getLimitOfDownloads());
-//                else pool = Executors.newSingleThreadExecutor();
-//
-//                pool.execute(new DownloadThread(file[0]));
                 file[0].getProgressBar().setValue(0);
 
                 DownloadThread downloadThread = new DownloadThread(file[0]);
+                Thread threadOfDownload= new Thread(downloadThread);
                 file[0].setDownloadThread(downloadThread);
 
+                //To select the pool
+                if (checkBox.isSelected())
+                    queuePool.execute(threadOfDownload);
+                else pool.execute(threadOfDownload);
+
+                //For progress bar filling
                 downloadThread.addPropertyChangeListener(evt -> {
                     if (evt.getPropertyName().equals("progress")) {
                         int newValue = (Integer) evt.getNewValue();
@@ -84,8 +88,6 @@ public class NewDownload {
                                 " Bytes  (" + file[0].getPercent() + "%)");
                     }
                 });
-
-                downloadThread.execute();
 
                 newFrame.setVisible(false);
             } else {

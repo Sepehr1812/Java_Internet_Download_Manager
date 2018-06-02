@@ -1,6 +1,7 @@
 import javax.swing.*;
 import java.io.IOException;
 import java.util.Collections;
+
 public class SelectActions {
 
     public static void pause() {
@@ -114,7 +115,9 @@ public class SelectActions {
 
         file.setPaused(false);
 
-        downloadThread.execute();
+        if (!file.isInQueue())
+            NewDownload.pool.execute(new Thread(downloadThread));
+        else NewDownload.queuePool.execute(new Thread(downloadThread));
     }
 
     private static void pausing(MyFile file) {

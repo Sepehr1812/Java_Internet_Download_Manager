@@ -132,8 +132,8 @@ class SortByName implements Comparator<MyFile> {
 class SortBySize implements Comparator<MyFile> {
     public int compare(MyFile a, MyFile b) {
         if (SearchAndSort.ascendant)
-            return (int) (a.getSize() - b.getSize());
-        else return (int) (-(a.getSize() - b.getSize()));
+            return a.getSize() - b.getSize();
+        else return -(a.getSize() - b.getSize());
     }
 }
 

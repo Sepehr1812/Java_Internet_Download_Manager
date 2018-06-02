@@ -18,7 +18,6 @@ public class MyFile implements Serializable {
     private JProgressBar progressBar = new JProgressBar(0, 100);
     private JLabel speedLabel;
     private boolean isSelected = false, isCanceled = false;
-    private Timer timer;
     private JPanel panel;
     private boolean isProcessing = false, isCompleted = false, isInQueue = false, isPaused = false;
     private long totalBytesRead = 0;
@@ -76,10 +75,6 @@ public class MyFile implements Serializable {
 
     public void setSelected(boolean selected) {
         isSelected = selected;
-    }
-
-    public Timer getTimer() {
-        return timer;
     }
 
     public boolean isNotCanceled() {
@@ -199,7 +194,7 @@ public class MyFile implements Serializable {
 
         progressBar.setStringPainted(true);
         progressBar.setValue(getPercent());
-        progressBar.setString(getPercent() / 100 * getSize() + " " + " / " + getSize() + "  (" + getPercent() + "%)");
+        progressBar.setString(getPercent() / 100.0 * getSize() + " " + " / " + getSize() + "  (" + getPercent() + "%)");
         UIManager.put("ProgressBar.background", Color.DARK_GRAY);
         progressBar.setBackground(Color.DARK_GRAY);
         progressBar.setForeground(Color.GRAY);
@@ -226,6 +221,8 @@ public class MyFile implements Serializable {
         if (isCanceled)
             canceling();
 
+        isSelected = false;
+
         return panel;
     }
 
@@ -235,41 +232,6 @@ public class MyFile implements Serializable {
                 + getSpeed() + "\n\nLink: " + getLink() + "\n\nDirectory: " + getDirectory() + "\n\nTime of Start: " + getTime();
         else return  "نام: " + getName() + "\n\nاندازه: " + getSize() + " " + "\n\nدرصد دانلود: " + getPercent() + "\n\nسرعت: "
                 + getSpeed() + "\n\nلینک: " + getLink() + "\n\nمکان: " + getDirectory() + "\n\nزمان شروع: " + getTime();
-    }
-
-    private void fillProgressBar(JFrame frame) {
-        final int[] c = {getPercent()};
-        final int waitingTime = 15 * 1000; //15 seconds
-        final int delay = waitingTime / 100;
-
-        timer = new Timer(delay, e -> {
-            if(c[0] <= 100) {
-                progressBar.setValue(++ c[0]);
-                setPercent(c[0]);
-//                progressBar.setString(getPercent() / 100.0 * getSize() + " " + getScale() + " / " + getSize() + getScale() + "  (" + getPercent() + "%)");
-            }
-        });
-
-        progressBar.setValue(c[0]);
-
-        timer.setInitialDelay(NewDownload.initialDelay * 60 * 1000 + 3000);
-
-        timer.start();
-        timer.setInitialDelay(3000);
-
-        // adding a changeListener to the progress bar
-        progressBar.addChangeListener(e -> {
-            if(progressBar.getValue() == 100) {
-                timer.stop();
-                if (Main.isEnglish)
-                    JOptionPane.showMessageDialog(frame, "Download Completed!");
-                else
-                    JOptionPane.showMessageDialog(frame, "دانلود کامل شد!");
-                isProcessing = false;
-                isCompleted = true;
-                isInQueue = false;
-            }
-        });
     }
 
     private void selecting(JPanel panel, JLabel name, JLabel speed) {
