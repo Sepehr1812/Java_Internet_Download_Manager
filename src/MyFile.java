@@ -22,11 +22,14 @@ public class MyFile implements Serializable {
     private boolean isProcessing = false, isCompleted = false, isInQueue = false, isPaused = false;
     private long totalBytesRead = 0;
     private DownloadThread downloadThread;
+    private int remainTime;
+    private long milliTime;
 
-    MyFile(String directory, String time, int percent) {
+    MyFile(String directory, String time, long milliTime, int percent) {
         this.directory = directory;
         this.time = time;
         this.percent = percent;
+        this.milliTime = milliTime;
     }
 
     public String getName() {
@@ -147,6 +150,18 @@ public class MyFile implements Serializable {
 
     public void setPaused(boolean paused) {
         isPaused = paused;
+    }
+
+    public int getRemainTime() {
+        return remainTime;
+    }
+
+    public void setRemainTime(int remainTime) {
+        this.remainTime = remainTime;
+    }
+
+    public boolean reachTime() {
+        return System.currentTimeMillis() - milliTime > remainTime * 60 * 1000;
     }
 
     public JPanel convertToJPanel(JFrame frame) {

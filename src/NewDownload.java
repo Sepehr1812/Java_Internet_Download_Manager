@@ -7,7 +7,6 @@ import java.util.concurrent.Executors;
 
 public class NewDownload {
 
-    public static int initialDelay;
     public static ExecutorService pool = Executors.newFixedThreadPool(SettingsFrame.getLimitNumber());
     public static ExecutorService queuePool = Executors.newFixedThreadPool(1);
 
@@ -53,7 +52,8 @@ public class NewDownload {
         JButton startButton = new JButton(nameOfThings[6]);
         startButton.addActionListener(e -> {
             if (! isLinkBanned(link.getText())) {
-                file[0] = new MyFile(SettingsFrame.getDirectory(), new SimpleDateFormat("yyyy/MM/dd , HH:mm:ss").format(Calendar.getInstance().getTime()), 0);
+                file[0] = new MyFile(SettingsFrame.getDirectory(), new SimpleDateFormat("yyyy/MM/dd , HH:mm:ss").format(Calendar.getInstance().getTime()),
+                        System.currentTimeMillis(), 0);
 
                 file[0].setLink(link.getText());
                 file[0].setName(name.getText());
@@ -62,7 +62,7 @@ public class NewDownload {
                     file[0].setInQueue(true);
                 else file[0].setInQueue(false);
 
-                initialDelay = (int) scheduleSpinner.getValue();
+                file[0].setRemainTime(Integer.parseInt(String.valueOf(scheduleSpinner.getValue())));
 
                 FilePanel.addToMainPanel(frame, file[0]);
 

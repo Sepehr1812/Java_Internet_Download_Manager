@@ -38,7 +38,10 @@ public class FileManager {
             FilePanel.downloadFiles = (ArrayList<MyFile>) ois.readObject();
             for (MyFile downloadFile : FilePanel.downloadFiles) {
                 FilePanel.downloadPanels.add(downloadFile.convertToJPanel(frame));
-//                downloadFile.getTimer().stop();
+                if (!downloadFile.reachTime()) {
+                    downloadFile.setPaused(false);
+                    SelectActions.resuming(downloadFile);
+                }
             }
         } catch (FileNotFoundException e) {
             System.err.println("File of whole files didn't find.");

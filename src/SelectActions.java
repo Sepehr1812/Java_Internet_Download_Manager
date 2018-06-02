@@ -99,7 +99,7 @@ public class SelectActions {
         }
     }
 
-    private static void resuming(MyFile file) {
+    public static void resuming(MyFile file) {
         DownloadThread downloadThread = new DownloadThread(file);
         file.setDownloadThread(downloadThread);
 

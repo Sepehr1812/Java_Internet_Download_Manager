@@ -43,7 +43,7 @@ public class DownloadThread extends SwingWorker<Void, Void> implements Runnable,
         //for considering initial delay time for schedule downloading.
         long currentTime = System.currentTimeMillis();
         while (true) {
-            if ((System.currentTimeMillis() - currentTime) / 1000.0 / 60 >= NewDownload.initialDelay)
+            if ((System.currentTimeMillis() - currentTime) / 1000.0 / 60 >= file.getRemainTime())
                 break;
         }
 
